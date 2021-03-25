@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AndroidTeamProject_H</string>
+    <string name="kakao_app_key">7f7bff9c466d16bcd31c9ca0e83be20b</string>
 </resources>
