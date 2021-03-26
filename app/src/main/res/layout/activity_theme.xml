@@ -34,14 +34,7 @@
                 android:textSize="18sp"
                 android:textStyle="italic" />
 
-            <EditText
-                android:layout_width="247dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="null"
-                android:textColor="#ffffff"
-                android:textCursorDrawable="#ffffff" />
+
 
             <ImageButton
                 android:layout_width="30dp"
