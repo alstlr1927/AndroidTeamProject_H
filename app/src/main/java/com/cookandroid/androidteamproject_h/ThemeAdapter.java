@@ -63,7 +63,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.txtView.setText(themeList.get(position).getTitle());
 
         Glide.with(context).load(themeList.get(position).getFirstImage()).into(holder.imgView);
@@ -102,11 +102,6 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
         }
     }
 
-    public ThemeData TourData(int position){
-
-        return themeList != null ? themeList.get(position) : null;
-    }
-
     class AsyncYTaskClassSub extends android.os.AsyncTask<Integer,ThemeData,ThemeData>{
 
         @Override
@@ -132,16 +127,16 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
         String url = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey="+
                 key+"&areaCode=1&contentTypeId="+contentsID
                 +"&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp="
-                +appName +"&_type=json";
+                +appName+"APPNAME&_type=json";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
                             JSONObject parse_response = (JSONObject) response.get("response");
-                            JSONObject parse_body = (JSONObject) response.get("body");
-                            JSONObject parse_item = (JSONObject) response.get("items");
-                            JSONObject parse_itemlist = (JSONObject) response.get("item");
+                            JSONObject parse_body = (JSONObject) parse_response.get("body");
+                            JSONObject parse_items = (JSONObject) parse_body.get("items");
+                            JSONObject parse_itemlist = (JSONObject) parse_items.get("item");
 
                             themeData.setFirstImage(parse_itemlist.getString("firstimage"));
                             themeData.setTitle(parse_itemlist.getString("title"));
@@ -152,11 +147,9 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
                             e.printStackTrace();
                         }
                     }
-                },new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+                },(error)->{
                         Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+
         });
         request.add(jsonObjectRequest);
         try {
