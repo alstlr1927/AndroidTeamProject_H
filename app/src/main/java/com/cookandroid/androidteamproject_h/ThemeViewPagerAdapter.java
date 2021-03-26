@@ -12,23 +12,17 @@ public class ThemeViewPagerAdapter extends FragmentStatePagerAdapter {
         super(fragmentManager);
     }
 
-    @NonNull
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
-            case 0 :
-                return Fragment_festival.newInstance();
-            case 1 :
-                return Fragment_shopping.newInstance();
-            case 2 :
-                return Fragment_food.newInstance();
-            case 3 :
-                return Fragment_activity.newInstance();
-            case 4 :
-                return Fragment_culture.newInstance();
-            default :
-                return null;
+        switch (position){
+            case 0: return Fragment_festival.newInstance();
+            case 1: return Fragment_shopping.newInstance();
+            case 2: return Fragment_food.newInstance();
+            case 3: return Fragment_activity.newInstance();
+            case 4: return Fragment_culture.newInstance();
+            default: return null;
         }
+
     }
 
     @Override
@@ -36,22 +30,18 @@ public class ThemeViewPagerAdapter extends FragmentStatePagerAdapter {
         return 5;
     }
 
+    //상단의 탭 레이아웃 인디케이터에 텍스트를 선언해주는것
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        switch(position) {
-            case 0 :
-                return "축제";
-            case 1 :
-                return "쇼핑";
-            case 2 :
-                return "맛집";
-            case 3 :
-                return "액티비티";
-            case 4 :
-                return "문화";
-            default :
-                return null;
+        switch (position){
+
+            case 0: return "축제";
+            case 1: return "쇼핑";
+            case 2: return "맛집";
+            case 3: return "액티비티";
+            case 4: return "문화";
+            default: return null;
         }
     }
 }

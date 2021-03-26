@@ -63,7 +63,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         holder.txtView.setText(themeList.get(position).getTitle());
 
         Glide.with(context).load(themeList.get(position).getFirstImage()).into(holder.imgView);
@@ -102,6 +102,11 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
         }
     }
 
+    public ThemeData TourData(int position){
+
+        return themeList != null ? themeList.get(position) : null;
+    }
+
     class AsyncYTaskClassSub extends android.os.AsyncTask<Integer,ThemeData,ThemeData>{
 
         @Override
@@ -127,7 +132,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
         String url = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey="+
                 key+"&areaCode=1&contentTypeId="+contentsID
                 +"&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp="
-                +appName+"APPNAME&_type=json";
+                +appName +"&_type=json";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
