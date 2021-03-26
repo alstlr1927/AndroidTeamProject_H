@@ -13,8 +13,6 @@ import com.airbnb.lottie.LottieAnimationView;
 
 public class Fragment_activity extends Fragment {
 
-    private LottieAnimationView lottieAnimationView;
-
     // 생성자 생성할것
     public Fragment_activity() {
 

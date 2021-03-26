@@ -118,7 +118,7 @@
         app:layout_constraintBottom_toTopOf="@+id/fb2"
         app:layout_constraintEnd_toEndOf="@+id/fb1" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="4dp"
@@ -142,6 +142,6 @@
 
         </androidx.viewpager.widget.ViewPager>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
