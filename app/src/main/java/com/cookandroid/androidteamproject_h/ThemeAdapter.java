@@ -2,6 +2,7 @@ package com.cookandroid.androidteamproject_h;
 
 import android.content.Context;
 import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,9 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
         this.themeList = themeList;
         this.layout = layout;
     }
-
+    public void setList(ArrayList<ThemeData> arrayList){
+        this.themeList = arrayList;
+    }
 
     @NonNull
     @Override
@@ -82,6 +85,9 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
+        if(themeList != null){
+            Log.d("@@@@@@@","themeList:"+themeList.size());
+        }
         return themeList == null ? 0 : themeList.size();
     }
 
