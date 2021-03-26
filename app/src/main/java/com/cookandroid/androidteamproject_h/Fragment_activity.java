@@ -67,10 +67,10 @@ public class Fragment_activity extends Fragment {
 
         grid_recyclerview.setLayoutManager(layoutManager);
 
-        adapter = new ThemeAdapter(getActivity(), dataList);
-
         Fragment_activity.AsyncTaskClassMain async = new Fragment_activity.AsyncTaskClassMain();
         async.execute();
+
+        adapter = new ThemeAdapter(getActivity(), dataList, R.layout.item_theme);
 
         return view;
     }
@@ -104,11 +104,10 @@ public class Fragment_activity extends Fragment {
     private void getAreaBasedList() {
         queue = Volley.newRequestQueue(getActivity());
 
-        String url = "http://api.visitkorea.or.kr/openapi/service/"
-                + "rest/KorService/areaBasedList?ServiceKey=" + KEY
-                + "&areaCode=1&contentTypeId=28&listYN=Y&arrange=P"
-                + "&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp="
-                + appName + "&_type=json";
+        String url ="http://api.visitkorea.or.kr/openapi/service/" +
+                "rest/KorService/areaBasedList?ServiceKey=" +
+                KEY +"&areaCode=1&contentTypeId=28&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp=" +
+                appName + "&_type=json";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -126,12 +125,7 @@ public class Fragment_activity extends Fragment {
                         JSONObject imsi = (JSONObject) parse_itemlist.get(i);
 
                         ThemeData data = new ThemeData();
-                        data.setFirstImage(imsi.getString("firstimgae"));
-                        if(data.getFirstImage() == null) {
-                            Log.d("haha", "nulll");
-                        } else {
-                            Log.d(TAG, data.getFirstImage());
-                        }
+                        data.setFirstImage(imsi.getString("firstimage"));
                         data.setTitle(imsi.getString("title"));
                         data.setAddr(imsi.getString("addr1"));
                         data.setMapX(imsi.getDouble("mapx"));
@@ -144,7 +138,6 @@ public class Fragment_activity extends Fragment {
                     grid_recyclerview.setAdapter(adapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.d(TAG, e.getMessage());
                 }
             }
         }, new Response.ErrorListener() {

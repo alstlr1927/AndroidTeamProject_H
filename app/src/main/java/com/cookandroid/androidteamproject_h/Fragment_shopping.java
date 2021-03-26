@@ -71,7 +71,7 @@ public class Fragment_shopping extends Fragment {
         Fragment_shopping.AsyncTaskClassMain async = new Fragment_shopping.AsyncTaskClassMain();
         async.execute();
 
-        adapter = new ThemeAdapter(getActivity(), list);
+        adapter = new ThemeAdapter(getActivity(), list, R.layout.item_theme);
 
         return view;
     }
@@ -108,11 +108,10 @@ public class Fragment_shopping extends Fragment {
     private void getAreaBasedList() {
         queue = Volley.newRequestQueue(getActivity());
 
-        String url = "http://api.visitkorea.or.kr/openapi/service/"
-                + "rest/KorService/areaBasedList?ServiceKey=" + KEY
-                + "&areaCode=1&contentTypeId=38&listYN=Y&arrange=P"
-                + "&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp="
-                + appName + "&_type=json";
+        String url ="http://api.visitkorea.or.kr/openapi/service/" +
+                "rest/KorService/areaBasedList?ServiceKey=" +
+                KEY +"&areaCode=1&contentTypeId=38&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp=" +
+                appName + "&_type=json";
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>(){

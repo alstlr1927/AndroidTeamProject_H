@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,7 +26,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Fragment_festival extends Fragment {
+public class Fragment_attraction extends Fragment {
 
     private RecyclerView grid_recyclerview;
     private static ThemeAdapter adapter;
@@ -42,13 +41,13 @@ public class Fragment_festival extends Fragment {
     static final String appName = "tourApp";
 
     // 생성자 생성할것
-    public Fragment_festival() {
+    public Fragment_attraction() {
 
     }
 
-    public static Fragment_festival newInstance() {
-        Fragment_festival fragment_festival = new Fragment_festival();
-        return fragment_festival;
+    public static Fragment_attraction newInstance() {
+        Fragment_attraction fragment_attraction = new Fragment_attraction();
+        return fragment_attraction;
     }
 
     @Nullable
@@ -62,9 +61,9 @@ public class Fragment_festival extends Fragment {
 
         grid_recyclerview.setLayoutManager(layoutManager);
 
-        adapter = new ThemeAdapter(getActivity(), dataList);
+        adapter = new ThemeAdapter(getActivity(), dataList, R.layout.item_theme);
 
-        Fragment_festival.AsyncTaskClassMain asyncTaskClassMain = new Fragment_festival.AsyncTaskClassMain();
+        Fragment_attraction.AsyncTaskClassMain asyncTaskClassMain = new Fragment_attraction.AsyncTaskClassMain();
         asyncTaskClassMain.execute();
 
         return view;
@@ -98,7 +97,7 @@ public class Fragment_festival extends Fragment {
 
         String url ="http://api.visitkorea.or.kr/openapi/service/" +
                 "rest/KorService/areaBasedList?ServiceKey=" +
-                KEY +"&areaCode=1&contentTypeId=15&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp=" +
+                KEY +"&areaCode=1&contentTypeId=12&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp=" +
                 appName + "&_type=json";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -130,7 +129,6 @@ public class Fragment_festival extends Fragment {
                             grid_recyclerview.setAdapter(adapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.d(TAG, e.getMessage());
                         }
                     }
                 }, new Response.ErrorListener() {

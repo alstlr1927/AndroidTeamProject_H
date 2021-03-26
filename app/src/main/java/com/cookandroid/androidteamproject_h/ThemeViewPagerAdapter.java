@@ -1,6 +1,5 @@
 package com.cookandroid.androidteamproject_h;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -15,7 +14,7 @@ public class ThemeViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position){
-            case 0: return Fragment_festival.newInstance();
+            case 0: return Fragment_attraction.newInstance();
             case 1: return Fragment_shopping.newInstance();
             case 2: return Fragment_food.newInstance();
             case 3: return Fragment_activity.newInstance();
@@ -36,7 +35,7 @@ public class ThemeViewPagerAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position){
 
-            case 0: return "축제";
+            case 0: return "관광지";
             case 1: return "쇼핑";
             case 2: return "맛집";
             case 3: return "액티비티";
