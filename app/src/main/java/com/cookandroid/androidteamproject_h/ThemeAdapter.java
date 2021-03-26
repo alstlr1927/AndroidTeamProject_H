@@ -22,6 +22,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,6 +47,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
     View view ;
 
     public ThemeAdapter(Context context, ArrayList<ThemeData> themeList,int layout) {
+        super();
         this.context = context;
         this.themeList = themeList;
         this.layout = layout;
@@ -139,9 +141,9 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
                     public void onResponse(JSONObject response) {
                         try {
                             JSONObject parse_response = (JSONObject) response.get("response");
-                            JSONObject parse_body = (JSONObject) response.get("body");
-                            JSONObject parse_item = (JSONObject) response.get("items");
-                            JSONObject parse_itemlist = (JSONObject) response.get("item");
+                            JSONObject parse_body = (JSONObject) parse_response.get("body");
+                            JSONObject parse_item = (JSONObject) parse_body.get("items");
+                            JSONObject parse_itemlist = (JSONObject) parse_item.get("item");
 
                             themeData.setFirstImage(parse_itemlist.getString("firstimage"));
                             themeData.setTitle(parse_itemlist.getString("title"));
