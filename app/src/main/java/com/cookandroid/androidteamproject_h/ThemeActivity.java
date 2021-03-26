@@ -86,7 +86,7 @@ public class ThemeActivity extends AppCompatActivity implements TabLayout.BaseOn
     @Override
     public void onBackPressed() {
         long currentTime = System.currentTimeMillis();
-        long gapTime = currentTime = backButtonTime;
+        long gapTime = currentTime - backButtonTime;
 
         if(gapTime >=0 && gapTime <=2000) {
             super.onBackPressed();
