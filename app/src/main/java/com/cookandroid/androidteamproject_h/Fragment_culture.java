@@ -70,6 +70,8 @@ public class Fragment_culture extends Fragment {
         Fragment_culture.AsyncTaskClassMain asyns = new Fragment_culture.AsyncTaskClassMain();
         asyns.execute();
 
+        layoutManager = new LinearLayoutManager(getContext(),RecyclerView.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
         adapter = new ThemeAdapter(getActivity(), list, R.layout.item_theme);
         recyclerView.setAdapter(adapter);
 

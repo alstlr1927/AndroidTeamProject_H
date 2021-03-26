@@ -58,7 +58,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        view = LayoutInflater.from(parent.getContext()).inflate(layout,parent,false);
+        view = LayoutInflater.from(context).inflate(layout,parent,false);
 
         MyViewHolder viewHolder = new MyViewHolder(view);
 
