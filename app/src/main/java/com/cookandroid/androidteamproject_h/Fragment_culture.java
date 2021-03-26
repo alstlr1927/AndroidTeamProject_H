@@ -67,12 +67,13 @@ public class Fragment_culture extends Fragment {
         view = inflater.inflate(R.layout.fragment_theme, container, false);
 
         recyclerView = view.findViewById(R.id.grid_recyclerview);
-        layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
         Fragment_culture.AsyncTaskClassMain asyns = new Fragment_culture.AsyncTaskClassMain();
         asyns.execute();
 
-        adapter = new ThemeAdapter(getActivity(), list, R.drawable.select_heart);
+        layoutManager = new LinearLayoutManager(getContext(),RecyclerView.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new ThemeAdapter(getActivity(), list, R.layout.item_theme);
+        recyclerView.setAdapter(adapter);
 
         return view;
     }
@@ -132,10 +133,9 @@ public class Fragment_culture extends Fragment {
 
     public void getAreaBasedList() {
         queue = Volley.newRequestQueue(getActivity());
-        String url = "http://api.visitkorea.or.kr/openapi/service/" +
+        String url ="http://api.visitkorea.or.kr/openapi/service/" +
                 "rest/KorService/areaBasedList?ServiceKey=" +
-                KEY +
-                "&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp=" +
+                KEY +"&areaCode=1&contentTypeId=14&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp=" +
                 appName + "&_type=json";
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -150,11 +150,9 @@ public class Fragment_culture extends Fragment {
                             JSONObject parse_items = (JSONObject) parse_body.get("items");
                             JSONArray parse_itemlist = (JSONArray) parse_items.get("item");
 
-                            list.remove(list);
-
                             for (int i = 0; i < parse_itemlist.length(); i++) {
                                 JSONObject imsi = (JSONObject) parse_itemlist.get(i);
-
+                                Log.d("@@@@","imsi:"+ imsi.toString());
                                 ThemeData themeData = new ThemeData();
                                 themeData.setFirstImage(imsi.getString("firstimage"));
                                 themeData.setTitle(imsi.getString("title"));
@@ -166,8 +164,8 @@ public class Fragment_culture extends Fragment {
                                 list.add(themeData);
 
                             }
-                            recyclerView.setAdapter(adapter);
-
+                            adapter.setList(list);
+                            adapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

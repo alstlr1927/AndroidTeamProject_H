@@ -71,7 +71,7 @@ public class Fragment_shopping extends Fragment {
         Fragment_shopping.AsyncTaskClassMain async = new Fragment_shopping.AsyncTaskClassMain();
         async.execute();
 
-        adapter = new ThemeAdapter(getActivity(), list, R.layout.item_theme);
+        adapter = new ThemeAdapter(getActivity(), list);
 
         return view;
     }

@@ -2,6 +2,7 @@ package com.cookandroid.androidteamproject_h;
 
 import android.content.Context;
 import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,12 +51,14 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
         this.themeList = themeList;
         this.layout = layout;
     }
-
+    public void setList(ArrayList<ThemeData> arrayList){
+        this.themeList = arrayList;
+    }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        view = LayoutInflater.from(parent.getContext()).inflate(layout,parent,false);
+        view = LayoutInflater.from(context).inflate(layout,parent,false);
 
         MyViewHolder viewHolder = new MyViewHolder(view);
 
@@ -82,6 +85,9 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
+        if(themeList != null){
+            Log.d("@@@@@@@","themeList:"+themeList.size());
+        }
         return themeList == null ? 0 : themeList.size();
     }
 
@@ -148,9 +154,9 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
                         }
                     }
                 },(error)->{
-                        Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
 
-        });
+                });
         request.add(jsonObjectRequest);
         try {
             Thread.sleep(1000);

@@ -30,14 +30,14 @@ import java.util.ArrayList;
 public class Fragment_festival extends Fragment {
 
     private RecyclerView grid_recyclerview;
-    ThemeAdapter adapter;
+    private static ThemeAdapter adapter;
     private LinearLayoutManager layoutManager;
 
     private RequestQueue queue;
 
     private ArrayList<ThemeData> dataList = new ArrayList<>();
 
-    static final String TAG = "ThemeActivity";
+    static final String TAG = "Festival_Fragment";
     static final String KEY = "2sODhH1TupFo8WC14q9q9smsSqNhEbiqYsJwrsBQP0svyz%2FWJvpZ1080fEkDZQC6mw%2BOBFRxQ%2BbuFfmKu8BOSg%3D%3D";
     static final String appName = "tourApp";
 
@@ -62,7 +62,7 @@ public class Fragment_festival extends Fragment {
 
         grid_recyclerview.setLayoutManager(layoutManager);
 
-        adapter = new ThemeAdapter(getActivity(), dataList, R.layout.item_theme);
+        adapter = new ThemeAdapter(getActivity(), dataList);
 
         Fragment_festival.AsyncTaskClassMain asyncTaskClassMain = new Fragment_festival.AsyncTaskClassMain();
         asyncTaskClassMain.execute();
@@ -96,11 +96,10 @@ public class Fragment_festival extends Fragment {
     private void getAreaBasedList() {
         queue = Volley.newRequestQueue(getActivity());
 
-        String url = "http://api.visitkorea.or.kr/openapi/service/"
-                + "rest/KorService/areaBasedList?ServiceKey=" + KEY
-                + "&areaCode=1&contentTypeId=15&listYN=Y&arrange=P"
-                + "&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp="
-                + appName + "&_type=json";
+        String url ="http://api.visitkorea.or.kr/openapi/service/" +
+                "rest/KorService/areaBasedList?ServiceKey=" +
+                KEY +"&areaCode=1&contentTypeId=15&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp=" +
+                appName + "&_type=json";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -115,18 +114,15 @@ public class Fragment_festival extends Fragment {
 
                             dataList.removeAll(dataList);
 
-                            Log.d(TAG, "" + parse_itemlist.length());
-                            Log.e(TAG, "" + parse_itemlist.length());
-
                             for (int i = 0; i < parse_itemlist.length(); i++) {
                                 JSONObject imsi = (JSONObject) parse_itemlist.get(i);
-
+                                Log.d("@@@@", "imsi:" +imsi.toString());
                                 ThemeData data = new ThemeData();
                                 data.setFirstImage(imsi.getString("firstimage"));
                                 data.setTitle(imsi.getString("title"));
                                 data.setAddr(imsi.getString("addr1"));
-                                data.setMapY(imsi.getDouble("mapy"));
                                 data.setMapX(imsi.getDouble("mapx"));
+                                data.setMapY(imsi.getDouble("mapy"));
                                 data.setContentsID(Integer.valueOf(imsi.getString("contentid")));
 
                                 dataList.add(data);
