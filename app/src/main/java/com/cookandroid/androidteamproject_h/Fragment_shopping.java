@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class Fragment_shopping extends Fragment {
     private View view;
-    ProgressDialog pDialog;
 
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
