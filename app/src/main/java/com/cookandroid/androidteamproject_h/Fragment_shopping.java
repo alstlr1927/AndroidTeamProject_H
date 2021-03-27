@@ -38,10 +38,7 @@ public class Fragment_shopping extends Fragment {
 
     RequestQueue queue;
 
-    AlertDialog.Builder dialog;
     ArrayList<ThemeData> list = new ArrayList<>();
-
-    ThemeData detailThemeData = new ThemeData();
 
     final static String TAG = "ThemeActivity";
     static final String KEY = "2sODhH1TupFo8WC14q9q9smsSqNhEbiqYsJwrsBQP0svyz%2FWJvpZ1080fEkDZQC6mw%2BOBFRxQ%2BbuFfmKu8BOSg%3D%3D";

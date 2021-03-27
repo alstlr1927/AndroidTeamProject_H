@@ -1,5 +1,6 @@
 package com.cookandroid.androidteamproject_h;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +28,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class Fragment_attraction extends Fragment {
+
+    private ProgressDialog pDialog;
 
     private RecyclerView grid_recyclerview;
     private static ThemeAdapter adapter;
@@ -61,10 +64,10 @@ public class Fragment_attraction extends Fragment {
 
         grid_recyclerview.setLayoutManager(layoutManager);
 
-        adapter = new ThemeAdapter(getActivity(), dataList, R.layout.item_theme);
-
         Fragment_attraction.AsyncTaskClassMain asyncTaskClassMain = new Fragment_attraction.AsyncTaskClassMain();
         asyncTaskClassMain.execute();
+
+        adapter = new ThemeAdapter(getActivity(), dataList, R.layout.item_theme);
 
         return view;
     }
@@ -73,6 +76,7 @@ public class Fragment_attraction extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            displayLoader();
         }
 
         @Override
@@ -95,16 +99,16 @@ public class Fragment_attraction extends Fragment {
     private void getAreaBasedList() {
         queue = Volley.newRequestQueue(getActivity());
 
-        String url ="http://api.visitkorea.or.kr/openapi/service/" +
+        String url = "http://api.visitkorea.or.kr/openapi/service/" +
                 "rest/KorService/areaBasedList?ServiceKey=" +
-                KEY +"&areaCode=1&contentTypeId=12&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp=" +
+                KEY + "&areaCode=1&contentTypeId=12&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp=" +
                 appName + "&_type=json";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
+                        pDialog.dismiss();
                         try {
                             JSONObject parse_response = (JSONObject) response.get("response");
                             JSONObject parse_body = (JSONObject) parse_response.get("body");
@@ -115,7 +119,7 @@ public class Fragment_attraction extends Fragment {
 
                             for (int i = 0; i < parse_itemlist.length(); i++) {
                                 JSONObject imsi = (JSONObject) parse_itemlist.get(i);
-                                Log.d("@@@@", "imsi:" +imsi.toString());
+
                                 ThemeData data = new ThemeData();
                                 data.setFirstImage(imsi.getString("firstimage"));
                                 data.setTitle(imsi.getString("title"));
@@ -134,10 +138,19 @@ public class Fragment_attraction extends Fragment {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        pDialog.dismiss();
                         Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         Log.d(TAG, error.getMessage() + "Error");
                     }
                 });
         queue.add(jsonObjectRequest);
+    }
+
+    private void displayLoader() {
+        pDialog = new ProgressDialog(getActivity());
+        pDialog.setMessage("잠시만...!");
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(false);
+        pDialog.show();
     }
 }

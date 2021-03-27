@@ -31,14 +31,12 @@ import java.util.ArrayList;
 public class Fragment_activity extends Fragment {
 
     private View view;
-    ProgressDialog pDialog;
+    private ProgressDialog pDialog;
 
     private RecyclerView grid_recyclerview;
     private RequestQueue queue;
     private static ThemeAdapter adapter;
     private LinearLayoutManager layoutManager;
-
-    private AlertDialog.Builder dialog;
 
     private ArrayList<ThemeData> dataList = new ArrayList<>();
 
@@ -143,6 +141,7 @@ public class Fragment_activity extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                pDialog.dismiss();
                 Toast.makeText(getActivity(),
                         error.getMessage(), Toast.LENGTH_LONG).show();
                 Log.d(TAG, error.getMessage() + "에러");

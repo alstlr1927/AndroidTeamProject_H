@@ -43,7 +43,7 @@ public class Fragment_culture extends Fragment {
     private RequestQueue queue;
     private ThemeAdapter adapter;
     private ArrayList<ThemeData> list = new ArrayList<>();
-    ThemeData detailThemeData = new ThemeData();
+
     final static String TAG = "ThemeActivity";
     static final String KEY = "2sODhH1TupFo8WC14q9q9smsSqNhEbiqYsJwrsBQP0svyz%2FWJvpZ1080fEkDZQC6mw%2BOBFRxQ%2BbuFfmKu8BOSg%3D%3D";
     static final String appName = "tourApp";
@@ -67,13 +67,15 @@ public class Fragment_culture extends Fragment {
         view = inflater.inflate(R.layout.fragment_theme, container, false);
 
         recyclerView = view.findViewById(R.id.grid_recyclerview);
-        Fragment_culture.AsyncTaskClassMain asyns = new Fragment_culture.AsyncTaskClassMain();
-        asyns.execute();
 
         layoutManager = new LinearLayoutManager(getContext(),RecyclerView.VERTICAL, false);
+
         recyclerView.setLayoutManager(layoutManager);
+
         adapter = new ThemeAdapter(getActivity(), list, R.layout.item_theme);
-        recyclerView.setAdapter(adapter);
+
+        Fragment_culture.AsyncTaskClassMain asyns = new Fragment_culture.AsyncTaskClassMain();
+        asyns.execute();
 
         return view;
     }
@@ -125,7 +127,6 @@ public class Fragment_culture extends Fragment {
 
         @Override
         protected void onProgressUpdate(ThemeData... values) {
-            ThemeData themeData = values[0];
             super.onProgressUpdate(values);
         }
     }
@@ -151,7 +152,9 @@ public class Fragment_culture extends Fragment {
                             JSONArray parse_itemlist = (JSONArray) parse_items.get("item");
 
                             for (int i = 0; i < parse_itemlist.length(); i++) {
+
                                 JSONObject imsi = (JSONObject) parse_itemlist.get(i);
+
                                 Log.d("@@@@","imsi:"+ imsi.toString());
                                 ThemeData themeData = new ThemeData();
                                 themeData.setFirstImage(imsi.getString("firstimage"));
@@ -164,8 +167,7 @@ public class Fragment_culture extends Fragment {
                                 list.add(themeData);
 
                             }
-                            adapter.setList(list);
-                            adapter.notifyDataSetChanged();
+                            recyclerView.setAdapter(adapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -180,7 +182,7 @@ public class Fragment_culture extends Fragment {
 
     private void displayLoader() {
         pDialog = new ProgressDialog(getActivity());
-        pDialog.setMessage("잠시만기달려주세요!");
+        pDialog.setMessage("잠시만...!");
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(false);
         pDialog.show();
