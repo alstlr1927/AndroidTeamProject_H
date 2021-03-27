@@ -1,5 +1,8 @@
 package com.cookandroid.androidteamproject_h;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.Dialog;
 import android.content.Context;
 import android.media.Image;
 import android.util.Log;
@@ -7,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +30,7 @@ import com.bumptech.glide.Glide;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import xyz.hanks.library.bang.SmallBangView;
@@ -34,31 +39,33 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
 
     private Context context;
     private ArrayList<ThemeData> themeList;
-    ThemeData themeData = new ThemeData();
+    private ThemeData themeData = new ThemeData();
 
-    static final String key = "2sODhH1TupFo8WC14q9q9smsSqNhEbiqYsJwrsBQP0svyz%2FWJvpZ1080fEkDZQC6mw%2BOBFRxQ%2BbuFfmKu8BOSg%3D%3D";
+    private static final String key = "2sODhH1TupFo8WC14q9q9smsSqNhEbiqYsJwrsBQP0svyz%2FWJvpZ1080fEkDZQC6mw%2BOBFRxQ%2BbuFfmKu8BOSg%3D%3D";
 
-    static final String appName = "tourApp";
+    private static final String appName = "tourApp";
 
-    int layout = 0;
+    private int layout = 0;
 
-    RequestQueue request;
+    private RequestQueue request;
 
-    View view ;
+    private View view;
+    private View viewDialog;
 
-    public ThemeAdapter(Context context, ArrayList<ThemeData> themeList,int layout) {
+    public ThemeAdapter(Context context, ArrayList<ThemeData> themeList, int layout) {
         this.context = context;
         this.themeList = themeList;
         this.layout = layout;
     }
-    public void setList(ArrayList<ThemeData> arrayList){
+
+    public void setList(ArrayList<ThemeData> arrayList) {
         this.themeList = arrayList;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        view = LayoutInflater.from(context).inflate(layout,parent,false);
+        view = LayoutInflater.from(context).inflate(layout, parent, false);
 
         MyViewHolder viewHolder = new MyViewHolder(view);
 
@@ -76,17 +83,34 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int position = (int)view.getTag();
+                int position = (int) view.getTag();
                 ThemeAdapter.AsyncYTaskClassSub asyncYTaskClassSub = new ThemeAdapter.AsyncYTaskClassSub();
                 asyncYTaskClassSub.execute(position);
+            }
+        });
+
+        holder.like_heart.setOnClickListener((View v) -> {
+            if (themeList.get(position).isHeart()) {
+                holder.like_heart.setSelected(false);
+                themeList.get(position).setHeart(false);
+            } else {
+                holder.like_heart.setSelected(true);
+                themeList.get(position).setHeart(true);
+
+                holder.like_heart.likeAnimation(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                    }
+                });
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        if(themeList != null){
-            Log.d("@@@@@@@","themeList:"+themeList.size());
+        if (themeList != null) {
+            Log.d("@@@@@@@", "themeList:" + themeList.size());
         }
         return themeList == null ? 0 : themeList.size();
     }
@@ -108,7 +132,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
         }
     }
 
-    class AsyncYTaskClassSub extends android.os.AsyncTask<Integer,ThemeData,ThemeData>{
+    class AsyncYTaskClassSub extends android.os.AsyncTask<Integer, ThemeData, ThemeData> {
 
         @Override
         protected void onPreExecute() {
@@ -125,15 +149,46 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
 
             return themeData;
         }
+
+        @Override
+        protected void onPostExecute(ThemeData themeData) {
+            super.onPostExecute(themeData);
+
+            viewDialog = View.inflate(context, R.layout.dialog_info, null);
+
+            TextView txt_Detail_title = viewDialog.findViewById(R.id.txt_Detail_title);
+            TextView txt_Detail_addr = viewDialog.findViewById(R.id.txt_Detail_addr);
+            TextView txt_Detail_info = viewDialog.findViewById(R.id.txt_Detail_info);
+
+            Button btnExit = viewDialog.findViewById(R.id.btnExit);
+
+            ImageView img_Detail_info = viewDialog.findViewById(R.id.img_Detail_info);
+
+            txt_Detail_title.setText(themeData.getTitle());
+            txt_Detail_addr.setText(themeData.getAddr());
+            txt_Detail_info.setText(themeData.getOverView());
+
+            Glide.with(context).load(themeData.getFirstImage()).override(500, 300).into(img_Detail_info);
+
+            final Dialog dialog = new Dialog(viewDialog.getContext());
+
+            dialog.setContentView(viewDialog);
+            dialog.show();
+
+            btnExit.setOnClickListener((View v) -> {
+                dialog.dismiss();
+            });
+        }
     }
 
-    private ThemeData getData(Integer contentsID) {
+    private ThemeData getData(int contentID) {
         request = Volley.newRequestQueue(context);
 
-        String url = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey="+
-                key+"&areaCode=1&contentTypeId="+contentsID
-                +"&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp="
-                +appName+"APPNAME&_type=json";
+        String url = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey="
+                + key + "&contentId=" + contentID
+                + "&firstImageYN=Y&mapinfoYN=Y&addrinfoYN=Y&defaultYN=Y&overviewYN=Y"
+                + "&pageNo=1&MobileOS=AND&MobileApp="
+                + appName + "&_type=json";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
@@ -153,7 +208,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
                             e.printStackTrace();
                         }
                     }
-                },(error)->{
+                }, (error) -> {
                     Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
 
                 });

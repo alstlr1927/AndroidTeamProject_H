@@ -16,7 +16,7 @@ public class ThemeData implements Serializable {
     private int complete;
     private double mapX;
     private double mapY;
-    private boolean hart = false;
+    private boolean heart = false;
 
 
     public ThemeData(String title, String addr, double mapX, double mapY, String firstImage) {
@@ -118,16 +118,16 @@ public class ThemeData implements Serializable {
     }
 
 
-    public boolean isHart() {
+    public boolean isHeart() {
 
-        return hart;
+        return heart;
 
     }
 
 
-    public void setHart(boolean hart) {
+    public void setHeart(boolean hart) {
 
-        this.hart = hart;
+        this.heart = hart;
 
     }
 
