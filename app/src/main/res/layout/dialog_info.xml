@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#2E2E2E">
+    android:background="#ffffff"
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
@@ -17,7 +17,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="16dp"
-        android:background="#3A3A3A"
+        android:background="#C3E7F6"
+        android:elevation="10dp"
         app:layout_constraintBottom_toTopOf="@+id/txt_Detail_addr"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
@@ -27,7 +28,7 @@
 
         <TextView
             android:id="@+id/txt_Detail_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
@@ -36,7 +37,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:text="타이틀"
-            android:textColor="#ffffff"
+            android:textColor="#515050"
             android:textSize="14sp"
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -60,7 +61,7 @@
         android:layout_marginBottom="16dp"
         android:paddingLeft="12dp"
         android:text="주소"
-        android:textColor="#ffffff"
+        android:textColor="#515050"
         android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/scrollView3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -92,7 +93,7 @@
             android:layout_marginRight="8dp"
             android:inputType="textMultiLine"
             android:text="상세정보"
-            android:textColor="#ffffff"
+            android:textColor="#515050"
             android:textStyle="italic" />
 
 

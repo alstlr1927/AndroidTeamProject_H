@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Dialog;
 import android.content.Context;
+import android.database.Cursor;
 import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,14 +90,45 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
             }
         });
 
+        MainActivity.db = MainActivity.dbHelper.getWritableDatabase();
+
+        Cursor cursor = MainActivity.db.rawQuery("SELECT title FROM favorite_" + LoginActivity.userID + ";", null);
+        while(cursor.moveToNext()) {
+            if(cursor.getString(0).equals(themeList.get(position).getTitle())) {
+                themeList.get(position).setHeart(true);
+                break;
+            }
+        }
+
+        if(cursor != null) {
+            cursor.close();
+        }
+
+        if(themeList.get(position).isHeart()) {
+            holder.like_heart.setSelected(true);
+        } else {
+            holder.like_heart.setSelected(false);
+        }
+
         holder.like_heart.setOnClickListener((View v) -> {
             if (themeList.get(position).isHeart()) {
                 holder.like_heart.setSelected(false);
                 themeList.get(position).setHeart(false);
+
+                String favorDelete =
+                        "DELETE FROM favorite_" + LoginActivity.userID + " WHERE title='" + themeList.get(position).getTitle() +"';";
+                MainActivity.db.execSQL(favorDelete);
             } else {
                 holder.like_heart.setSelected(true);
                 themeList.get(position).setHeart(true);
 
+                String favorInsert = "INSERT INTO favorite_" + LoginActivity.userID + " VALUES('"
+                        + themeList.get(position).getTitle() + "','"
+                        + themeList.get(position).getAddr() + "','"
+                        + themeList.get(position).getMapX() + "','"
+                        + themeList.get(position).getMapY() + "','"
+                        + themeList.get(position).getFirstImage() + "')";
+                MainActivity.db.execSQL(favorInsert);
                 holder.like_heart.likeAnimation(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {

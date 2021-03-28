@@ -174,7 +174,6 @@ public class Fragment_culture extends Fragment {
                     }
                 }, (error) -> {
                     pDialog.dismiss();
-                    Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.d(TAG, error.getMessage() + "에러");
                 });
         queue.add(jsObjRequest);

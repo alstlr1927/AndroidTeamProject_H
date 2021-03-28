@@ -35,11 +35,11 @@ public class ThemeViewPagerAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position){
 
-            case 0: return "Culture";
-            case 1: return "Attraction";
-            case 2: return "Shopping";
-            case 3: return "Food";
-            case 4: return "Activity";
+            case 0: return "문화";
+            case 1: return "관광지";
+            case 2: return "쇼핑";
+            case 3: return "맛집";
+            case 4: return "액티비티";
             default: return null;
         }
     }

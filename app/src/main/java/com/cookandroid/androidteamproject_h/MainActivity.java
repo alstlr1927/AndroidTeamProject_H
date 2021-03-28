@@ -2,6 +2,7 @@ package com.cookandroid.androidteamproject_h;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.widget.TextView;
@@ -10,6 +11,9 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private long backButtonTime = 0l;
+
+    public static DBHelper dbHelper;
+    public static SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

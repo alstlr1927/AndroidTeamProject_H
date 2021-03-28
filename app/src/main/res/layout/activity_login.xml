@@ -6,11 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
     android:orientation="vertical"
-    android:background="#303136">
+    android:background="#2E2E2E"
+    android:gravity="center">
 
     <com.kakao.usermgmt.LoginButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"/>
 
 </RelativeLayout>
