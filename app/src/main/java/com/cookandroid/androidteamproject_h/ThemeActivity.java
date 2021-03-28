@@ -4,15 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -72,6 +78,8 @@ public class ThemeActivity extends AppCompatActivity implements View.OnClickList
         fb1 = findViewById(R.id.fb1);
         fb2 = findViewById(R.id.fb2);
         fb3 = findViewById(R.id.fb3);
+        btnSearch = findViewById(R.id.btnSearch);
+        edtSearch = findViewById(R.id.edtSearch);
 
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
@@ -79,6 +87,8 @@ public class ThemeActivity extends AppCompatActivity implements View.OnClickList
         fb1.setOnClickListener(this);
         fb2.setOnClickListener(this);
         fb3.setOnClickListener(this);
+        btnSearch.setOnClickListener(this);
+        edtSearch.setOnClickListener(this);
     }
 
     @Override
@@ -88,6 +98,9 @@ public class ThemeActivity extends AppCompatActivity implements View.OnClickList
                 fbAnimation();
                 break;
             case R.id.fb2:
+                fbAnimation();
+                Intent intent = new Intent(ThemeActivity.this, BottomMenuActivity.class);
+                startActivity(intent);
                 break;
             case R.id.fb3:
 
@@ -117,14 +130,111 @@ public class ThemeActivity extends AppCompatActivity implements View.OnClickList
                 listView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
 
-
+                Button btnSave = dialogView.findViewById(R.id.btnSave);
+                Button btnExit = dialogView.findViewById(R.id.btnExit);
 
                 final Dialog dialog = new Dialog(dialogView.getContext());
+
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        SparseBooleanArray booleanArray = listView.getCheckedItemPositions();
+
+                        if(booleanArray.get(position)) {
+                            checkList.add(list.get(position));
+                            MainActivity.db = MainActivity.dbHelper.getWritableDatabase();
+
+                            Cursor cursor1 = MainActivity.db.rawQuery("SELECT title FROM checker_" + LoginActivity.userID + ";", null);
+
+                            if(checkList != null) {
+                                while(cursor1.moveToNext()) {
+                                    if(cursor1.getString(0).equals(list.get(position).getTitle())) {
+                                        Toast.makeText(getApplicationContext(), list.get(position).getTitle() +"은(는) 이미 리스트에 등록되었습니다.", Toast.LENGTH_SHORT).show();
+                                        checkList.remove(list.get(position));
+                                    }
+                                }
+                                cursor1.moveToFirst();
+                            }
+                        } else {
+                            checkList.remove(list.get(position));
+                        }
+                        cursor.close();
+                    }
+                });
+
+                listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                        AlertDialog.Builder dlg = new AlertDialog.Builder(ThemeActivity.this);
+                        dlg.setMessage("정말로 찜목록에서 \""+ titleList.get(position) +"\" 을(를) 제거 하시겠습니까.");
+                        dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String favorDelete = "DELETE FROM favorite_" + LoginActivity.userID + " WHERE title ='" + list.get(position).getTitle() + "';";
+                                MainActivity.db.execSQL(favorDelete);
+
+                                adapter.remove(titleList.get(position));
+                                adapter.notifyDataSetChanged();
+
+                                list.remove(list.get(position));
+                            }
+                        });
+                        dlg.setNegativeButton("취소", null);
+                        dlg.show();
+                        return true;
+                    }
+                });
 
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setContentView(dialogView);
                 dialog.show();
 
+                btnSave.setOnClickListener((View view) -> {
+                    MainActivity.db = MainActivity.dbHelper.getWritableDatabase();
+                    Cursor cursor1 = MainActivity.db.rawQuery("SELECT * FROM checker_" + LoginActivity.userID + ";", null);
+                    cursor1.moveToFirst();
+
+                    if(checkList.size() + cursor.getCount() > 8) {
+                        Toast.makeText(getApplicationContext(),
+                                "8개 이상을 체크리스트에 담을 수는 없습니다.(현재 체크리스트 : "+ cursor1.getCount() +"곳)", Toast.LENGTH_SHORT).show();
+                    } else {
+                        for(ThemeData data:checkList) {
+
+                            String insertCheckList =
+                                    "INSERT INTO checker_" + LoginActivity.userID + "(title, addr, mapX, mapy, firstImage) VALUES('"
+                                    + data.getTitle() + "', '"
+                                    + data.getAddr() + "', '"
+                                    + data.getMapX() + "', '"
+                                    + data.getMapY() + "', '"
+                                    + data.getFirstImage() + "');";
+
+                            MainActivity.db.execSQL(insertCheckList);
+                        }
+                        Toast.makeText(getApplicationContext(), "체크리스트 잘 담았습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                    cursor1.close();
+                    dialog.dismiss();
+                });
+
+                btnExit.setOnClickListener((View view) -> {
+                    dialog.dismiss();
+                });
+
+                cursor.close();
+
+                break;
+
+            case R.id.btnSearch :
+                String word = edtSearch.getText().toString().trim();
+                Intent intent2 = new Intent(ThemeActivity.this, SearchActivity.class);
+                if(word.length() >= 2) {
+                    intent2.putExtra("word", word);
+                    startActivity(intent2);
+                } else {
+                    Toast.makeText(getApplicationContext(), "두 글자 이상 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default :
                 break;
         }
     }

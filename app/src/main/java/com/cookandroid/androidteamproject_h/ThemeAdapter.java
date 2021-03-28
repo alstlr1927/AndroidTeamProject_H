@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.media.Image;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -193,6 +195,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
             TextView txt_Detail_info = viewDialog.findViewById(R.id.txt_Detail_info);
 
             Button btnExit = viewDialog.findViewById(R.id.btnExit);
+            Button btnBrowse = viewDialog.findViewById(R.id.btnBrowse);
 
             ImageView img_Detail_info = viewDialog.findViewById(R.id.img_Detail_info);
 
@@ -209,6 +212,10 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
 
             btnExit.setOnClickListener((View v) -> {
                 dialog.dismiss();
+            });
+            btnBrowse.setOnClickListener((View v) -> {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query="+themeData.getTitle()));
+                context.startActivity(intent);
             });
         }
     }
@@ -235,6 +242,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
                             themeData.setTitle(parse_itemlist.getString("title"));
                             themeData.setAddr(parse_itemlist.getString("addr1"));
                             themeData.setOverView(parse_itemlist.getString("overview"));
+                            themeData.setTel(parse_itemlist.getString("tel"));
 
                         } catch (JSONException e) {
                             e.printStackTrace();
