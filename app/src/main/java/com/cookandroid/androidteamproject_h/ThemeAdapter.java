@@ -242,7 +242,6 @@ public class ThemeAdapter extends RecyclerView.Adapter<ThemeAdapter.MyViewHolder
                             themeData.setTitle(parse_itemlist.getString("title"));
                             themeData.setAddr(parse_itemlist.getString("addr1"));
                             themeData.setOverView(parse_itemlist.getString("overview"));
-                            themeData.setTel(parse_itemlist.getString("tel"));
 
                         } catch (JSONException e) {
                             e.printStackTrace();
