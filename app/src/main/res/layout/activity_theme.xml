@@ -118,6 +118,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:backgroundTint="#B6B4B5"
+        android:src="@drawable/heart_select"
         android:visibility="invisible"
         app:elevation="6dp"
         app:fabSize="normal"
