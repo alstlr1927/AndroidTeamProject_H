@@ -1,5 +1,6 @@
 package com.cookandroid.androidteamproject_h;
 
+
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,9 +14,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 
-public class Fragment_GPS extends Fragment {
+public class Fragment_GPS extends Fragment implements OnMapReadyCallback {
 
     private Button btn1;
 
@@ -23,6 +31,9 @@ public class Fragment_GPS extends Fragment {
     private RecyclerView recyclerView_gps;
     private LinearLayoutManager layoutManager;
     private GPSAdapter adapter;
+    private MapView map = null;
+
+
 
     @Nullable
     @Override
@@ -54,6 +65,67 @@ public class Fragment_GPS extends Fragment {
             getActivity().finish();
         });
 
+        map = (MapView) view.findViewById(R.id.map);
+        map.getMapAsync(this);
+
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        map.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        map.onStop();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        map.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        map.onResume();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        map.onLowMemory();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        map.onLowMemory();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if(map != null){
+            map.onCreate(savedInstanceState);
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng SEOUL = new LatLng(37.56,126.97);
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(SEOUL);
+        markerOptions.title("서울");
+        markerOptions.snippet("수도");
+        googleMap.addMarker(markerOptions);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+
     }
 }

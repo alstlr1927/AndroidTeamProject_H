@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cookandroid.androidteamproject_h">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:name=".App"
@@ -19,7 +19,9 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
-
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBnawsehBOJo2GGrNYI_ixmH9-7ZVzBl60"/>
         <activity android:name=".ThemeActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
