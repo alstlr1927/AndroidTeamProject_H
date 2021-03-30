@@ -28,7 +28,7 @@ public class BottomMenuActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch(item.getItemId()) {
-                    case R.id.frag1 :
+                    case R.id.gps_frag :
                         setChangeFragment(1);
                         break;
                     case R.id.frag2 :
@@ -50,16 +50,16 @@ public class BottomMenuActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
         switch(position) {
-            case 0 :
+            case 1 :
                 ft.replace(R.id.frameLayout, new Fragment_GPS());
                 break;
-            case 1 :
+            case 2 :
                 ft.replace(R.id.frameLayout, new Fragment2());
                 break;
-            case 2 :
+            case 3 :
                 ft.replace(R.id.frameLayout, new Fragment3());
                 break;
-            case 3 :
+            case 4 :
                 ft.replace(R.id.frameLayout, new Fragment4());
                 break;
         }

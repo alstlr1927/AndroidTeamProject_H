@@ -3,7 +3,7 @@
 
 
     <item
-        android:id="@+id/frag1"
+        android:id="@+id/gps_frag"
         android:enabled="true"
         android:title="frag1"/>
 

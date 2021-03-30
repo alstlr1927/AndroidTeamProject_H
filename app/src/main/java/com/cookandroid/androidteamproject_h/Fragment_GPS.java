@@ -24,8 +24,6 @@ public class Fragment_GPS extends Fragment {
     private LinearLayoutManager layoutManager;
     private GPSAdapter adapter;
 
-    BottomMenuActivity activity = new BottomMenuActivity();
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
