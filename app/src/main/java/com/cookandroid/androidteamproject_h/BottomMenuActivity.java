@@ -2,7 +2,6 @@ package com.cookandroid.androidteamproject_h;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
@@ -52,7 +51,7 @@ public class BottomMenuActivity extends AppCompatActivity {
         ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
         switch(position) {
             case 0 :
-                ft.replace(R.id.frameLayout, new Fragment1());
+                ft.replace(R.id.frameLayout, new Fragment_GPS());
                 break;
             case 1 :
                 ft.replace(R.id.frameLayout, new Fragment2());
