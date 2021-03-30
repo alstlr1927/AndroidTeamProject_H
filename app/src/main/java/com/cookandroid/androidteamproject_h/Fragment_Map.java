@@ -3,6 +3,7 @@ package com.cookandroid.androidteamproject_h;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -42,6 +43,11 @@ public class Fragment_Map extends Fragment {
         adapter = new MapAdapter(R.layout.item_map, checkList);
         recyclerView_map.setAdapter(adapter);
 
+
+
+
+
         return view;
     }
+
 }

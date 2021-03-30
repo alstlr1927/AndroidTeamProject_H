@@ -1,5 +1,8 @@
 package com.cookandroid.androidteamproject_h;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +12,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.internal.$Gson$Preconditions;
+
 import java.util.ArrayList;
 
 public class MapAdapter extends RecyclerView.Adapter<MapAdapter.CustomViewHolder> {
 
+    private Context context;
     private int layout;
     private ArrayList<ThemeData> list;
 
@@ -33,6 +39,10 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.CustomViewHolder
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         holder.mapTitle.setText(list.get(position).getTitle());
         holder.mapContent.setText(list.get(position).getAddr());
+        holder.imgSearch.setOnClickListener((View v) -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" + list.get(position).getTitle()));
+            v.getContext().startActivity(intent);
+        });
     }
 
     @Override
@@ -44,13 +54,14 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.CustomViewHolder
 
         TextView mapTitle;
         TextView mapContent;
-        ImageView imgGoogle;
+        ImageView imgSearch;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
 
             mapTitle = itemView.findViewById(R.id.mapTitle);
             mapContent = itemView.findViewById(R.id.mapContent);
+            imgSearch = itemView.findViewById(R.id.imgSearch);
         }
     }
 }
