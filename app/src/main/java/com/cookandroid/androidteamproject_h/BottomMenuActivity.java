@@ -22,7 +22,7 @@ public class BottomMenuActivity extends AppCompatActivity {
 
         findViewByIdFunc();
 
-        setChangeFragment(0);
+        setChangeFragment(1);
 
         navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -34,11 +34,14 @@ public class BottomMenuActivity extends AppCompatActivity {
                     case R.id.frag2 :
                         setChangeFragment(2);
                         break;
-                    case R.id.frag3 :
+                    case R.id.map_frag :
                         setChangeFragment(3);
                         break;
                     case R.id.frag4 :
                         setChangeFragment(4);
+                        break;
+                    case R.id.appInfo_frag :
+                        setChangeFragment(5);
                         break;
                 }
                 return true;
@@ -57,10 +60,13 @@ public class BottomMenuActivity extends AppCompatActivity {
                 ft.replace(R.id.frameLayout, new Fragment2());
                 break;
             case 3 :
-                ft.replace(R.id.frameLayout, new Fragment3());
+                ft.replace(R.id.frameLayout, new Fragment_Map());
                 break;
             case 4 :
                 ft.replace(R.id.frameLayout, new Fragment4());
+                break;
+            case 5 :
+                ft.replace(R.id.frameLayout, new Fragment_appInfo());
                 break;
         }
         ft.commit();

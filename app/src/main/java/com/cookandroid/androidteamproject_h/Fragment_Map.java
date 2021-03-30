@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,21 +14,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class Fragment_GPS extends Fragment {
-
-    private Button btn1;
+public class Fragment_Map extends Fragment {
 
     private ArrayList<ThemeData> checkList = new ArrayList<>();
-    private RecyclerView recyclerView_gps;
+    private RecyclerView recyclerView_map;
     private LinearLayoutManager layoutManager;
-    private GPSAdapter adapter;
+    private MapAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.gps_fragment, container, false);
-
-        checkList.removeAll(checkList);
+        View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         MainActivity.db = MainActivity.dbHelper.getWritableDatabase();
 
@@ -41,18 +36,11 @@ public class Fragment_GPS extends Fragment {
             }
         }
 
-        recyclerView_gps = view.findViewById(R.id.recyclerView_gps);
+        recyclerView_map = view.findViewById(R.id.recyclerView_map);
         layoutManager = new LinearLayoutManager(view.getContext());
-        recyclerView_gps.setLayoutManager(layoutManager);
-        adapter = new GPSAdapter(R.layout.item_gps, checkList);
-        recyclerView_gps.setAdapter(adapter);
-
-        btn1 = view.findViewById(R.id.btn1);
-        btn1.setOnClickListener((View v) ->{
-            MainActivity.db.execSQL("DELETE FROM checker_" + LoginActivity.userID + ";");
-            adapter.notifyDataSetChanged();
-            getActivity().finish();
-        });
+        recyclerView_map.setLayoutManager(layoutManager);
+        adapter = new MapAdapter(R.layout.item_map, checkList);
+        recyclerView_map.setAdapter(adapter);
 
         return view;
     }

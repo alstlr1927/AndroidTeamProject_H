@@ -5,7 +5,7 @@
     <item
         android:id="@+id/gps_frag"
         android:enabled="true"
-        android:title="frag1"/>
+        android:title="GPS"/>
 
     <item
         android:id="@+id/frag2"
@@ -13,12 +13,17 @@
         android:title="frag2"/>
 
     <item
-        android:id="@+id/frag3"
+        android:id="@+id/map_frag"
         android:enabled="true"
-        android:title="frag3"/>
+        android:title="Map"/>
 
     <item
         android:id="@+id/frag4"
         android:enabled="true"
         android:title="frag4"/>
+
+    <item
+        android:id="@+id/appInfo_frag"
+        android:enabled="true"
+        android:title="App Information"/>
 </menu>
