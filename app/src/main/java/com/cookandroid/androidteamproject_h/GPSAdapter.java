@@ -32,6 +32,7 @@ public class GPSAdapter extends RecyclerView.Adapter<GPSAdapter.CustomViewHolder
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         holder.checkerTitle.setText(list.get(position).getTitle());
         holder.checkerContent.setText(list.get(position).getAddr());
+        holder.itemView.setTag(position);
     }
 
     @Override

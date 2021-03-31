@@ -39,6 +39,7 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.CustomViewHolder
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         holder.mapTitle.setText(list.get(position).getTitle());
         holder.mapContent.setText(list.get(position).getAddr());
+        holder.itemView.setTag(position);
         holder.imgSearch.setOnClickListener((View v) -> {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" + list.get(position).getTitle()));
             v.getContext().startActivity(intent);

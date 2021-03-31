@@ -33,6 +33,8 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback {
     private GPSAdapter adapter;
     private MapView map = null;
 
+    private double goalLng = 0.0, goalLat = 0.0;
+
 
 
     @Nullable
