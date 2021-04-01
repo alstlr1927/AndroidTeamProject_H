@@ -22,6 +22,8 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.CustomViewHolder
     private int layout;
     private ArrayList<ThemeData> list;
 
+    private OnItemClickListener mListener;
+
     public MapAdapter(int layout, ArrayList<ThemeData> list) {
         this.layout = layout;
         this.list = list;
@@ -63,6 +65,24 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.CustomViewHolder
             mapTitle = itemView.findViewById(R.id.mapTitle);
             mapContent = itemView.findViewById(R.id.mapContent);
             imgSearch = itemView.findViewById(R.id.imgSearch);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        mListener.onItemClick(v, pos);
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View v, int pos);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener Listener) {
+        this.mListener = Listener;
     }
 }

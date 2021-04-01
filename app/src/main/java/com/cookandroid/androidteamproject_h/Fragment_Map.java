@@ -1,8 +1,18 @@
 package com.cookandroid.androidteamproject_h;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -10,52 +20,75 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class Fragment_Map extends Fragment implements OnMapReadyCallback {
+public class Fragment_Map extends Fragment {
 
-    private ArrayList<ThemeData> checkList = new ArrayList<>();
-    private ArrayList<String> check = new ArrayList<>();
+    static final String TAG = "MapLocateActivity";
 
-    private DrawerLayout drawerLayout;
-    private RecyclerView recyclerView_map;
+    static ArrayList<ThemeData> list = new ArrayList<>();
+
+    private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private MapAdapter adapter;
 
     private LocationManager locationManager;
+    private static final int REQUEST_CODE_LOCATION = 2;
 
-    private GoogleMap googleMap1;
-    private GoogleMap googleMap2;
+    private LinearLayout drawer;
+    private DrawerLayout drawerLayout;
+    private ImageView imgGpsPicture;
+    private Button alert, information;
+    private TextView tvTitle;
 
-    private MapView mapView;
-
-    private View view1;
-
-    final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-
-    private double lat = 0.0, lng = 0.0;
-    private boolean win = false;
+    private double startLat, startLng, goalLat, goalLng, distance;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_map, container, false);
+
+        findViewByIdFunc(view);
+
+        recyclerSetting();
+
+        eventHandlerFunc();
+
+        return view;
+    }
+
+    private void recyclerSetting() {
+        list.removeAll(list);
 
         MainActivity.db = MainActivity.dbHelper.getWritableDatabase();
 
@@ -63,100 +96,111 @@ public class Fragment_Map extends Fragment implements OnMapReadyCallback {
 
         if(cursor != null) {
             while(cursor.moveToNext()) {
-                checkList.add(new ThemeData(cursor.getString(1), cursor.getString(2), cursor.getDouble(3), cursor.getDouble(4), cursor.getString(5)));
+                list.add(new ThemeData(cursor.getString(1), cursor.getString(2), cursor.getDouble(3), cursor.getDouble(4), cursor.getString(5)));
             }
         }
 
-        recyclerView_map = view.findViewById(R.id.recyclerView_map);
-        drawerLayout = view.findViewById(R.id.drawerLayout_map);
-
-        layoutManager = new LinearLayoutManager(view.getContext());
-        recyclerView_map.setLayoutManager(layoutManager);
-        adapter = new MapAdapter(R.layout.item_map, checkList);
-        recyclerView_map.setAdapter(adapter);
-
-        mapView = view1.findViewById(R.id.mapView);
-
-        mapView.onCreate(savedInstanceState);
-
-        mapView.getMapAsync(this);
-
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-
-
-        recyclerView_map.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView_map, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-
-                boolean tag = true;
-
-                if(check.size() == 0) {
-                    check.add(checkList.get(position).getTitle());
-                } else {
-                    for(int i =0;i < check.size();i++) {
-                        if(check.get(i).equals(checkList.get(position).getTitle())) {
-                            check.remove(i);
-                            tag =false;
-                            break;
-                        }
-                    }
-                    if(tag) {
-                        check.add(checkList.get(position).getTitle());
-                    }
-                }
-                mapView = view1.findViewById(R.id.mapView);
-
-                mapView.getMapAsync(Fragment_Map.this);
-
-                drawerLayout.closeDrawer(Gravity.LEFT);
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
-
-        return view;
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new MapAdapter(R.layout.item_map, list);
+        recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public void onMapReady(final GoogleMap googleMap) {
-        googleMap1 = googleMap;
-        googleMap2 = googleMap;
+    private void findViewByIdFunc(View view) {
+        drawerLayout = view.findViewById(R.id.drawerLayout);
+        recyclerView = view.findViewById(R.id.recyclerView_map);
+        imgGpsPicture = view.findViewById(R.id.imgGpsPicture);
+        alert = view.findViewById(R.id.alert);
+        information = view.findViewById(R.id.information);
+        drawer = view.findViewById(R.id.drawer);
+        tvTitle = view.findViewById(R.id.tvTitle);
+    }
 
-        googleMap1.clear();
+    private void eventHandlerFunc() {
+        adapter.setOnItemClickListener(new MapAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos) {
+                tvTitle.setText(list.get(pos).getTitle());
 
-        if(check.size() >=1) {
+                drawerLayout.closeDrawer(drawer);
+                Glide.with(getActivity()).load(list.get(pos).getFirstImage()).override(500, 300).into(imgGpsPicture);
 
-            for(String x:check) {
+                locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
 
-                for(ThemeData y:checkList) {
+                Location userLocation = getMyLocation();
 
-                    if(x.equals(y.getTitle())) {
+                if(userLocation != null) {
+                    startLat = userLocation.getLatitude();
+                    startLng = userLocation.getLongitude();
 
-                        LatLng latLng = new LatLng(y.getMapY(), y.getMapX());
+                    Log.d(TAG, startLat + "  " + startLng);
 
-                        MarkerOptions markerOptions = new MarkerOptions();
-                        markerOptions.title(y.getTitle());
-                        markerOptions.snippet(y.getAddr());
-                        markerOptions.position(latLng);
-
-                        googleMap1.addMarker(markerOptions);
-                        googleMap1.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
-                    }
                 }
+
+                goalLat = list.get(pos).getMapY();
+                goalLng = list.get(pos).getMapX();
+
+                distance = DistanceByDegree(startLat, startLng, goalLat, goalLng);
+
+                alert.setOnClickListener((View view2) -> {
+                    if(distance > 500.0) {
+                        if(distance >= 1000.0) {
+                            Log.d(TAG, Math.round(distance / 10.0) /100.0 +"km");
+                            distance = Math.round(distance / 10.0) /100.0;
+                            Toast.makeText(getActivity(), "너무 떨어져 있습니다. (" + distance + "km)", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d(TAG, Math.round(distance) + "m");
+                            distance = Math.round(distance);
+                            Toast.makeText(getActivity(), "너무 떨어져 있습니다. (" + distance + "m)", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "카메라 실행" + distance, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
+
+        information.setOnClickListener((View v) -> {
+            AlertDialog.Builder dlg = new AlertDialog.Builder(getContext());
+            dlg.setTitle("설 명");
+            dlg.setMessage("목적지와 500m 이내에서 카메라 모드 버튼을 눌러야 사진 촬영이 가능합니다!!");
+            dlg.setPositiveButton("확인", null);
+            dlg.show();
+        });
+    }
+
+    private Location getMyLocation() {
+        Location currentLocation = null;
+
+        // Register the listener with the Location Manager to receive location updates
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, this.REQUEST_CODE_LOCATION);
+            getMyLocation();
+        } else {
+            // 수동으로 위치 구하기
+            String locationProvider = LocationManager.GPS_PROVIDER;
+            currentLocation = locationManager.getLastKnownLocation(locationProvider);
+            if (currentLocation != null) {
+                double lat = currentLocation.getLatitude();
+                double lng = currentLocation.getLongitude();
             }
         }
+        return currentLocation;
+    }
 
-        if(win) {
-            LatLng latLng = new LatLng(lat, lng);
+    public double DistanceByDegree(double lat1, double lng1, double lat2, double lng2) {
+        Location startLoc = new Location("start");
+        Location goalLoc = new Location("goal");
 
-            Log.d("MAP", lat + "  " + lng);
+        startLoc.setLatitude(lat1);
+        startLoc.setLongitude(lng1);
 
-            MarkerOptions markerOptions = new MarkerOptions();
+        goalLoc.setLatitude(lat2);
+        goalLoc.setLongitude(lng2);
 
-        }
+        double distance = startLoc.distanceTo(goalLoc);
+
+        return distance;
     }
 }
