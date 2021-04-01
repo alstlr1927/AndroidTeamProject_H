@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:layout_gravity="left"
     android:orientation="vertical"
-    android:background="#ffffff">
+    android:background="#ffffff"
+    android:id="@+id/gps_drawer">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -13,11 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,7 +35,7 @@ import java.util.ArrayList;
 
 public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
 
-    private Button btn1,btn2;
+    private Button btn1;
 
     private ArrayList<ThemeData> checkList = new ArrayList<>();
     private RecyclerView recyclerView_gps;
@@ -43,6 +45,8 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
     private LocationManager locationManager;
     private static final int REQUEST_CODE_LOCATION = 2;
     Location myLocation = null;
+    private DrawerLayout drawerLayout;
+    private LinearLayout gps_layout;
 
     private double goalLng = 0.0, goalLat = 0.0;
     static final String TAG = "GPSActivity";
@@ -76,6 +80,8 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
 
 
 
+
+
         btn1.setOnClickListener((View v) ->{
             MainActivity.db.execSQL("DELETE FROM checker_" + LoginActivity.userID + ";");
             adapter.notifyDataSetChanged();
@@ -85,29 +91,25 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
         map = (MapView) view.findViewById(R.id.map);
         map.getMapAsync(this);
 
+        adapter.setOnItemClickListener(new GPSAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos) {
+                drawerLayout.closeDrawer(gps_layout);
+                double mapX = checkList.get(pos).getMapY();
+                double mapY = checkList.get(pos).getMapX();
+                String title = checkList.get(pos).getTitle();
+                String addr = checkList.get(pos).getAddr();
 
-        btn2.setOnClickListener(view1 -> {
-
-            locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
-            myLocation = getMyLocation();
-            if(myLocation != null){
-                double lat = myLocation.getLatitude();
-                double org = myLocation.getLongitude();
-
-                LatLng SEOUL = new LatLng(lat,org);
+                LatLng SEOUL = new LatLng(mapX,mapY);
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(SEOUL);
-                markerOptions.title("내위치");
-                markerOptions.snippet("응응");
+                markerOptions.title(title);
+                markerOptions.snippet(addr);
                 mMap.addMarker(markerOptions);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
-            }else{
-                Toast.makeText(getActivity(), "gps가 안잡혀요", Toast.LENGTH_SHORT).show();
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
             }
         });
-
-
 
         return view;
     }
@@ -115,7 +117,8 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
 
     private void findViewByIdFunc(View view) {
         btn1 = view.findViewById(R.id.btn1);
-        btn2 = view.findViewById(R.id.btn2);
+        gps_layout = view.findViewById(R.id.gps_drawer);
+        drawerLayout = view.findViewById(R.id.gps_activity);
     }
 
     @Override
@@ -166,14 +169,23 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
    @Override
    public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng SEOUL = new LatLng(37.56,126.97);
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(SEOUL);
-        markerOptions.title("서울");
-        markerOptions.snippet("수도");
-        googleMap.addMarker(markerOptions);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+       locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
+       myLocation = getMyLocation();
+       if(myLocation != null){
+           double lat = myLocation.getLatitude();
+           double org = myLocation.getLongitude();
+
+           LatLng SEOUL = new LatLng(lat,org);
+           MarkerOptions markerOptions = new MarkerOptions();
+           markerOptions.position(SEOUL);
+           markerOptions.title("내위치");
+           markerOptions.snippet("응응");
+           mMap.addMarker(markerOptions);
+           mMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
+           mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+       }else{
+           Toast.makeText(getActivity(), "gps가 안잡혀요", Toast.LENGTH_SHORT).show();
+       }
 
     };
 

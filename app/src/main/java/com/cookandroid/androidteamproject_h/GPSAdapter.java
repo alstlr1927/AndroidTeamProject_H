@@ -15,6 +15,8 @@ public class GPSAdapter extends RecyclerView.Adapter<GPSAdapter.CustomViewHolder
     private int layout;
     private ArrayList<ThemeData> list;
 
+    private GPSAdapter.OnItemClickListener mListener;
+
     public GPSAdapter(int layout, ArrayList<ThemeData> list) {
         this.layout = layout;
         this.list = list;
@@ -50,6 +52,24 @@ public class GPSAdapter extends RecyclerView.Adapter<GPSAdapter.CustomViewHolder
 
             checkerTitle = itemView.findViewById(R.id.checkerTitle);
             checkerContent = itemView.findViewById(R.id.checkerContent);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        mListener.onItemClick(v, pos);
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View v, int pos);
+    }
+
+    public void setOnItemClickListener(GPSAdapter.OnItemClickListener Listener) {
+        this.mListener = Listener;
     }
 }
