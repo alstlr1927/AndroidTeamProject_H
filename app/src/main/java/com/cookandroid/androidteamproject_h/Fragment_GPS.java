@@ -120,6 +120,11 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
                 Toast.makeText(getActivity(), "gps가 안잡혀요", Toast.LENGTH_SHORT).show();
             }
         });
+
+        btn3.setOnClickListener(view1 -> {
+
+
+        });
     }
 
 
@@ -232,5 +237,19 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
             }
         }
         return currentLocation;
+    }
+    public double DistanceByDegree(double lat1, double lng1, double lat2, double lng2) {
+        Location startLoc = new Location("start");
+        Location goalLoc = new Location("goal");
+
+        startLoc.setLatitude(lat1);
+        startLoc.setLongitude(lng1);
+
+        goalLoc.setLatitude(lat2);
+        goalLoc.setLongitude(lng2);
+
+        double distance = startLoc.distanceTo(goalLoc);
+
+        return distance;
     }
 }
