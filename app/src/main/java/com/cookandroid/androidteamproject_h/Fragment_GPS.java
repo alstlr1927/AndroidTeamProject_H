@@ -35,7 +35,7 @@ import java.util.ArrayList;
 
 public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
 
-    private Button btn1;
+    private Button btn1,btn2,btn3;
 
     private ArrayList<ThemeData> checkList = new ArrayList<>();
     private RecyclerView recyclerView_gps;
@@ -64,24 +64,15 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
         MainActivity.db = MainActivity.dbHelper.getWritableDatabase();
         findViewByIdFunc(view);
 
-        Cursor cursor = MainActivity.db.rawQuery("SELECT * FROM checker_" + LoginActivity.userID + ";", null);
+        findLikeList(view);
 
-        if(cursor != null) {
-            while(cursor.moveToNext()) {
-                checkList.add(new ThemeData(cursor.getString(1), cursor.getString(2), cursor.getDouble(3), cursor.getDouble(4), cursor.getString(5)));
-            }
-        }
-
-        recyclerView_gps = view.findViewById(R.id.recyclerView_gps);
-        layoutManager = new LinearLayoutManager(view.getContext());
-        recyclerView_gps.setLayoutManager(layoutManager);
-        adapter = new GPSAdapter(R.layout.item_gps, checkList);
-        recyclerView_gps.setAdapter(adapter);
+        eventHandlerFunc(view);
 
 
+        return view;
+    }
 
-
-
+    public void eventHandlerFunc(View view) {
         btn1.setOnClickListener((View v) ->{
             MainActivity.db.execSQL("DELETE FROM checker_" + LoginActivity.userID + ";");
             adapter.notifyDataSetChanged();
@@ -110,8 +101,42 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
             }
         });
+        btn2.setOnClickListener(view1 -> {
+            locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
+            myLocation = getMyLocation();
+            if(myLocation != null){
+                double lat = myLocation.getLatitude();
+                double org = myLocation.getLongitude();
 
-        return view;
+                LatLng SEOUL = new LatLng(lat,org);
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(SEOUL);
+                markerOptions.title("내위치");
+                markerOptions.snippet("응응");
+                mMap.addMarker(markerOptions);
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+            }else{
+                Toast.makeText(getActivity(), "gps가 안잡혀요", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    public void findLikeList(View view) {
+        Cursor cursor = MainActivity.db.rawQuery("SELECT * FROM checker_" + LoginActivity.userID + ";", null);
+
+        if(cursor != null) {
+            while(cursor.moveToNext()) {
+                checkList.add(new ThemeData(cursor.getString(1), cursor.getString(2), cursor.getDouble(3), cursor.getDouble(4), cursor.getString(5)));
+            }
+        }
+
+        recyclerView_gps = view.findViewById(R.id.recyclerView_gps);
+        layoutManager = new LinearLayoutManager(view.getContext());
+        recyclerView_gps.setLayoutManager(layoutManager);
+        adapter = new GPSAdapter(R.layout.item_gps, checkList);
+        recyclerView_gps.setAdapter(adapter);
     }
 
 
@@ -119,6 +144,8 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
         btn1 = view.findViewById(R.id.btn1);
         gps_layout = view.findViewById(R.id.gps_drawer);
         drawerLayout = view.findViewById(R.id.gps_activity);
+        btn2 = view.findViewById(R.id.btn2);
+        btn3 = view.findViewById(R.id.btn3);
     }
 
     @Override
@@ -169,25 +196,23 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
    @Override
    public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-       locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
-       myLocation = getMyLocation();
-       if(myLocation != null){
-           double lat = myLocation.getLatitude();
-           double org = myLocation.getLongitude();
+       LatLng SEOUL = new LatLng(37.56, 126.97);
 
-           LatLng SEOUL = new LatLng(lat,org);
-           MarkerOptions markerOptions = new MarkerOptions();
-           markerOptions.position(SEOUL);
-           markerOptions.title("내위치");
-           markerOptions.snippet("응응");
-           mMap.addMarker(markerOptions);
-           mMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
-           mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-       }else{
-           Toast.makeText(getActivity(), "gps가 안잡혀요", Toast.LENGTH_SHORT).show();
-       }
+       MarkerOptions markerOptions = new MarkerOptions();
 
-    };
+       markerOptions.position(SEOUL);
+
+       markerOptions.title("서울");
+
+       markerOptions.snippet("수도");
+
+       googleMap.addMarker(markerOptions);
+
+       googleMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
+
+       googleMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+   }
+
 
     private Location getMyLocation() {
         Location currentLocation = null;
