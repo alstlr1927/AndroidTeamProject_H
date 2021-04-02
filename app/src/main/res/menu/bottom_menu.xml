@@ -23,7 +23,8 @@
         android:title="frag4"/>
 
     <item
-        android:id="@+id/appInfo_frag"
+        android:id="@+id/collect_frag"
         android:enabled="true"
-        android:title="App Information"/>
+        android:title="Collections"/>
+
 </menu>

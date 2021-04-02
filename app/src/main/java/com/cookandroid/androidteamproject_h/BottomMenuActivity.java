@@ -40,9 +40,12 @@ public class BottomMenuActivity extends AppCompatActivity {
                     case R.id.frag4 :
                         setChangeFragment(3);
                         break;
-                    case R.id.appInfo_frag :
+                    case R.id.collect_frag :
                         setChangeFragment(4);
                         break;
+//                    case R.id.appInfo_frag :
+//                        setChangeFragment(5);
+//                        break;
                 }
                 return true;
             }
@@ -69,8 +72,11 @@ public class BottomMenuActivity extends AppCompatActivity {
                 ft.replace(R.id.frameLayout, new Fragment4());
                 break;
             case 4 :
-                ft.replace(R.id.frameLayout, new Fragment_appInfo());
+                ft.replace(R.id.frameLayout, new Fragment_collec());
                 break;
+//            case 5 :
+//                ft.replace(R.id.frameLayout, new Fragment_appInfo());
+//                break;
         }
         ft.commit();
     }
