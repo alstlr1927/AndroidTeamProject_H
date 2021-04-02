@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -53,7 +54,7 @@ import java.util.ArrayList;
 
 public class Fragment_Map extends Fragment {
 
-    static final String TAG = "MapLocateActivity";
+    static final String TAG = "MAP";
 
     static ArrayList<ThemeData> list = new ArrayList<>();
 
@@ -140,20 +141,21 @@ public class Fragment_Map extends Fragment {
                 goalLat = list.get(pos).getMapY();
                 goalLng = list.get(pos).getMapX();
 
-                distance = DistanceByDegree(startLat, startLng, goalLat, goalLng);
+                distance = DistanceByDegree(startLat, startLng, startLat, startLng);
 
                 alert.setOnClickListener((View view2) -> {
                     if(distance > 500.0) {
                         if(distance >= 1000.0) {
                             Log.d(TAG, Math.round(distance / 10.0) /100.0 +"km");
-                            distance = Math.round(distance / 10.0) /100.0;
-                            Toast.makeText(getActivity(), "너무 떨어져 있습니다. (" + distance + "km)", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "너무 떨어져 있습니다. (" + Math.round(distance / 10.0) /100.0 + "km)", Toast.LENGTH_SHORT).show();
                         } else {
                             Log.d(TAG, Math.round(distance) + "m");
-                            distance = Math.round(distance);
-                            Toast.makeText(getActivity(), "너무 떨어져 있습니다. (" + distance + "m)", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "너무 떨어져 있습니다. (" + Math.round(distance) + "m)", Toast.LENGTH_SHORT).show();
                         }
                     } else {
+                        Intent intent = new Intent(view2.getContext(), CameraActivity.class);
+                        intent.putExtra("title", list.get(pos).getTitle());
+                        view2.getContext().startActivity(intent);
                         Toast.makeText(getActivity(), "카메라 실행" + distance, Toast.LENGTH_SHORT).show();
                     }
                 });

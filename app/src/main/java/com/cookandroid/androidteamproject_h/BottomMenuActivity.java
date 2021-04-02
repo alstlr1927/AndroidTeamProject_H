@@ -22,26 +22,26 @@ public class BottomMenuActivity extends AppCompatActivity {
 
         findViewByIdFunc();
 
-        setChangeFragment(1);
+        setChangeFragment(0);
 
         navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch(item.getItemId()) {
                     case R.id.gps_frag :
-                        setChangeFragment(1);
+                        setChangeFragment(0);
                         break;
                     case R.id.frag2 :
-                        setChangeFragment(2);
+                        setChangeFragment(1);
                         break;
                     case R.id.map_frag :
-                        setChangeFragment(3);
+                        setChangeFragment(2);
                         break;
                     case R.id.frag4 :
-                        setChangeFragment(4);
+                        setChangeFragment(3);
                         break;
                     case R.id.appInfo_frag :
-                        setChangeFragment(5);
+                        setChangeFragment(4);
                         break;
                 }
                 return true;
@@ -53,19 +53,22 @@ public class BottomMenuActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
         switch(position) {
-            case 1 :
-                ft.replace(R.id.frameLayout, new Fragment_GPS());
+            case 0 :
+                Fragment_GPS fragment_gps = new Fragment_GPS();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frameLayout, fragment_gps, "gps")
+                        .commit();
                 break;
-            case 2 :
+            case 1 :
                 ft.replace(R.id.frameLayout, new Fragment2());
                 break;
-            case 3 :
+            case 2 :
                 ft.replace(R.id.frameLayout, new Fragment_Map());
                 break;
-            case 4 :
+            case 3 :
                 ft.replace(R.id.frameLayout, new Fragment4());
                 break;
-            case 5 :
+            case 4 :
                 ft.replace(R.id.frameLayout, new Fragment_appInfo());
                 break;
         }
