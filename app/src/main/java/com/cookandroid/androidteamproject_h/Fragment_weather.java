@@ -8,29 +8,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.cookandroid.androidteamproject_h.PreferenceManager;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,50 +35,26 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class Fragment2 extends Fragment {
+public class Fragment_weather extends Fragment {
     private int tabPosition;
 
     private View rootView;
 
     private SwipeRefreshLayout swipeRefreshLayout;
-    private DrawerLayout main_drawer_layout;
-    private ImageButton menuButton;
-    private NavigationView navigationView;
-    private TextView dateNow;
-    private ImageButton searchButton;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private ImageButton delButton;
     private RecyclerView recyclerView;
     private RecyclerView recyclerView2;
     private ImageView weathericon;
 
-    private TextView region;                //도시
     private TextView current_temp;          //현재기온
-    private TextView current_location;      //현재 위치
-    private TextView current_bodily_temp;   //현재 위치
-    private TextView current_rain;          //강우량
     private TextView current_desc;          //설명
     private TextView current_temp_max;
     private TextView current_temp_min;
-    private TextView current_pressure;
-    private TextView current_humidity;
-    private TextView current_sunrise;
-    private TextView current_sunset;
     private String temperature;
-    private String bodily_temperature;
 
-    private String Daily_image;
-    private ImageButton search_button;
     private String dailyLow;
     private String dailyHigh;
     private String temp_f;
 
-    private String rain_1h;
-    private String rain_3h;
-    private String address_text;
-    private String level1;
-    private String level2;
     private String temp_extra;
     private ArrayList<HourlyItem> hourlyItemList = new ArrayList<>();
     private ArrayList<DailyItem> dailyItemList = new ArrayList<>();
@@ -95,12 +64,11 @@ public class Fragment2 extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment2, container, false);
+        rootView = inflater.inflate(R.layout.fragment_weather, container, false);
 
         initView(inflater, container, savedInstanceState);
 
         displayWeather(rootView.getContext());
-
 
         return rootView;
     }
@@ -119,7 +87,6 @@ public class Fragment2 extends Fragment {
     
     public void find_future_weather(float lat, float lon) {
         String url="http://api.openweathermap.org/data/2.5/onecall?appid=fdf791ec127c3eec1f20991329a20e2f&units=metric&id=1835848&lang=kr";
-        //http://api.openweathermap.org/data/2.5/onecall?appid=944b4ec7c3a10a1bbb4a432d14e6f979&units=metric&id=1835848&lang=kr&lat=35&lon=127
         url += "&lat="+String.valueOf(lat)+"&lon="+String.valueOf(lon);
         Log.e("SEULGI WEATHER API URL", url);
 
@@ -250,7 +217,7 @@ public class Fragment2 extends Fragment {
     public void find_weather(float lat, float lon) {
         String url="http://api.openweathermap.org/data/2.5/weather?appid=fdf791ec127c3eec1f20991329a20e2f&units=metric&id=1835848&lang=kr";
         url += "&lat="+String.valueOf(lat)+"&lon="+String.valueOf(lon);
-        Log.e("SEULGI WEATHER API URL", url);
+        Log.e("SEULGI1 WEATHER API URL", url);
 
         JsonObjectRequest jor = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -310,14 +277,25 @@ public class Fragment2 extends Fragment {
     }
 
     private void initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        region=(TextView)rootView.findViewById(R.id.region_text);
         current_temp = (TextView)rootView.findViewById(R.id.temp_now);
-        current_location = (TextView)rootView.findViewById(R.id.region_text);
         current_desc=(TextView)rootView.findViewById(R.id.weather_description);
         current_temp_max =(TextView)rootView.findViewById(R.id.temp_max);
         current_temp_min =(TextView)rootView.findViewById(R.id.temp_min);
         weathericon = (ImageView)rootView.findViewById(R.id.image_weather);
 
+        swipeRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.swipe_layout);
+
+        /* pull to refresh */
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                /* 새로고침 시 수행될 코드 */
+                displayWeather(rootView.getContext());
+
+                /* 새로고침 완료 */
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     public void setTabPosition(int position) { tabPosition=position; }
