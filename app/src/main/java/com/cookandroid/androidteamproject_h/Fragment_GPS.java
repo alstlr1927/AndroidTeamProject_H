@@ -5,19 +5,23 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -28,14 +32,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
+public class Fragment_GPS extends Fragment implements OnMapReadyCallback, View.OnClickListener{
 
-    private Button btn1,btn2,btn3;
+    private FloatingActionButton btn1,btn2,btn3;
 
     private ArrayList<ThemeData> checkList = new ArrayList<>();
     private RecyclerView recyclerView_gps;
@@ -47,11 +53,15 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
     Location myLocation = null;
     private DrawerLayout drawerLayout;
     private LinearLayout gps_layout;
+    LatLng Gaul;
+    private Animation btn_open, btn_close;
+    private boolean fbOpen = false;
 
-    private double goalLng = 0.0, goalLat = 0.0;
+    private double goalLng = 0.0, goalLat = 0.0,distance=0.0;
     static final String TAG = "GPSActivity";
     GoogleMap mMap =null;
-
+    private boolean flag = false;
+    LatLng SEOUL1;
 
 
     @Nullable
@@ -73,11 +83,6 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
     }
 
     public void eventHandlerFunc(View view) {
-        btn1.setOnClickListener((View v) ->{
-            MainActivity.db.execSQL("DELETE FROM checker_" + LoginActivity.userID + ";");
-            adapter.notifyDataSetChanged();
-            getActivity().finish();
-        });
 
         map = (MapView) view.findViewById(R.id.map);
         map.getMapAsync(this);
@@ -91,40 +96,18 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
                 String title = checkList.get(pos).getTitle();
                 String addr = checkList.get(pos).getAddr();
 
-                LatLng SEOUL = new LatLng(mapX,mapY);
+                Gaul = new LatLng(mapX,mapY);
                 MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(SEOUL);
+                markerOptions.position(Gaul);
                 markerOptions.title(title);
                 markerOptions.snippet(addr);
                 mMap.addMarker(markerOptions);
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(Gaul));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
             }
-        });
-        btn2.setOnClickListener(view1 -> {
-            locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
-            myLocation = getMyLocation();
-            if(myLocation != null){
-                double lat = myLocation.getLatitude();
-                double org = myLocation.getLongitude();
-
-                LatLng SEOUL = new LatLng(lat,org);
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(SEOUL);
-                markerOptions.title("내위치");
-                markerOptions.snippet("응응");
-                mMap.addMarker(markerOptions);
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-            }else{
-                Toast.makeText(getActivity(), "gps가 안잡혀요", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btn3.setOnClickListener(view1 -> {
-
 
         });
+
     }
 
 
@@ -146,11 +129,16 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
 
 
     private void findViewByIdFunc(View view) {
-        btn1 = view.findViewById(R.id.btn1);
         gps_layout = view.findViewById(R.id.gps_drawer);
         drawerLayout = view.findViewById(R.id.gps_activity);
+        btn1 = view.findViewById(R.id.btn1);
         btn2 = view.findViewById(R.id.btn2);
         btn3 = view.findViewById(R.id.btn3);
+        btn_open = AnimationUtils.loadAnimation(getContext(), R.anim.fab_open);
+        btn_close = AnimationUtils.loadAnimation(getContext(), R.anim.fab_close);
+        btn1.setOnClickListener(this);
+        btn2.setOnClickListener(this);
+        btn3.setOnClickListener(this);
     }
 
     @Override
@@ -251,5 +239,79 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback{
         double distance = startLoc.distanceTo(goalLoc);
 
         return distance;
+    }
+    private void fbAnimation() {
+        if (fbOpen) {
+            btn2.startAnimation(btn_close);
+            btn3.startAnimation(btn_close);
+            btn2.setClickable(false);
+            btn3.setClickable(false);
+            fbOpen = false;
+        } else {
+            btn2.startAnimation(btn_open);
+            btn3.startAnimation(btn_open);
+            btn2.setClickable(true);
+            btn3.setClickable(true);
+            fbOpen = true;
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btn1 :
+                fbAnimation();
+                break;
+            case R.id.btn2 :
+                fbAnimation();
+                locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
+                myLocation = getMyLocation();
+                if(myLocation != null){
+                    double lat = myLocation.getLatitude();
+                    double org = myLocation.getLongitude();
+
+                    SEOUL1 = new LatLng(lat,org);
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.position(SEOUL1);
+                    markerOptions.title("내위치");
+                    markerOptions.snippet("응응");
+                    mMap.addMarker(markerOptions);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL1));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                }else{
+                    Toast.makeText(getActivity(), "gps가 안잡혀요", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.btn3 :
+                    fbAnimation();
+                    locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
+                    myLocation = getMyLocation();
+                    double lat = myLocation.getLatitude();
+                    double org = myLocation.getLongitude();
+
+                    SEOUL1 = new LatLng(lat,org);
+                    CircleOptions circle1KM = new CircleOptions().center(SEOUL1) //원점
+                            .radius(1000)      //반지름 단위 : m
+                            .strokeWidth(0f)  //선너비 0f : 선없음
+                            .fillColor(Color.parseColor("#880000ff")); //배경색
+
+                    mMap.addCircle(circle1KM);
+
+                    locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
+                    myLocation = getMyLocation();
+                    double lat1 = myLocation.getLatitude();
+                    double org1 = myLocation.getLongitude();
+                    fbAnimation();
+                    distance = DistanceByDegree(lat1, org1, goalLng, goalLat);
+                    if(distance <= 500.0){
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(Gaul);
+                        mMap.addMarker(markerOptions);
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(Gaul));
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                    }
+                break;
+        }
     }
 }
