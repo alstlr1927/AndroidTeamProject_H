@@ -1,8 +1,11 @@
 package com.cookandroid.androidteamproject_h;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +48,14 @@ public class CollecAdapter extends RecyclerView.Adapter<CollecAdapter.CustomView
         }
 
         holder.txtTitle.setText(list.get(position).getTitle());
+
+        holder.btnContent.setOnClickListener((View v) -> {
+            String content = list.get(position).getContents();
+            AlertDialog.Builder dlg = new AlertDialog.Builder(v.getContext());
+            dlg.setTitle("Content");
+            dlg.setMessage(content);
+            dlg.show();
+        });
     }
 
     @Override
@@ -56,7 +67,6 @@ public class CollecAdapter extends RecyclerView.Adapter<CollecAdapter.CustomView
 
         public ImageView imgCollect;
         public Button btnContent;
-        public Button btnInfo;
         public TextView txtTitle;
 
         public CustomViewHolder(@NonNull View itemView) {
@@ -64,7 +74,6 @@ public class CollecAdapter extends RecyclerView.Adapter<CollecAdapter.CustomView
 
             imgCollect = itemView.findViewById(R.id.imgCollect);
             btnContent = itemView.findViewById(R.id.btnContent);
-            btnInfo = itemView.findViewById(R.id.btnInfo);
             txtTitle = itemView.findViewById(R.id.txtTitle);
         }
     }
