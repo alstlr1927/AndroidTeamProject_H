@@ -62,6 +62,7 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback, View.O
     GoogleMap mMap =null;
     private boolean flag = false;
     LatLng SEOUL1;
+    CircleOptions circle1KM;
 
 
     @Nullable
@@ -284,19 +285,32 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback, View.O
                 }
                 break;
             case R.id.btn3 :
+                if(btn3.isActivated()){
+                    btn3.setActivated(false);
+                    mMap.clear();
+                    flag = false;
+                }else{
+
                     fbAnimation();
+                    btn3.setActivated(true);
+                    flag = true;
                     locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
                     myLocation = getMyLocation();
                     double lat = myLocation.getLatitude();
                     double org = myLocation.getLongitude();
 
                     SEOUL1 = new LatLng(lat,org);
-                    CircleOptions circle1KM = new CircleOptions().center(SEOUL1) //원점
+                    circle1KM = new CircleOptions().center(SEOUL1) //원점
                             .radius(100)      //반지름 단위 : m
                             .strokeWidth(0f)  //선너비 0f : 선없음
                             .fillColor(Color.parseColor("#880000ff")); //배경색
 
                     mMap.addCircle(circle1KM);
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.position(SEOUL1);
+                    mMap.addMarker(markerOptions);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL1));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
                     locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
                     myLocation = getMyLocation();
@@ -305,12 +319,14 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback, View.O
                     fbAnimation();
                     distance = DistanceByDegree(lat1, org1, goalLng, goalLat);
                     if(distance <= 500.0){
-                        MarkerOptions markerOptions = new MarkerOptions();
-                        markerOptions.position(Gaul);
-                        mMap.addMarker(markerOptions);
+                        MarkerOptions markerOptions1 = new MarkerOptions();
+                        markerOptions1.position(Gaul);
+                        mMap.addMarker(markerOptions1);
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(Gaul));
                         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
                     }
+                }
+
                 break;
         }
     }
