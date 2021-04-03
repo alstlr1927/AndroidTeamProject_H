@@ -63,7 +63,7 @@ public class BottomMenuActivity extends AppCompatActivity {
                 ft.replace(R.id.frameLayout, new Fragment_weather());
                 break;
             case 2 :
-                ft.replace(R.id.frameLayout, new Fragment_Map());
+                ft.replace(R.id.frameLayout, new Fragment_event());
                 break;
             case 3 :
                 ft.replace(R.id.frameLayout, new Fragment_collec());

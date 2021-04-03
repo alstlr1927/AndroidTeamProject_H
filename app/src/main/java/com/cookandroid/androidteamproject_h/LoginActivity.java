@@ -125,8 +125,6 @@ public class LoginActivity extends AppCompatActivity {
                                 + "mapY REAL,"
                                 + "firstImage TEXT,"
                                 + "picture TEXT,"
-                                + "content_pola TEXT,"
-                                + "content_title TEXT,"
                                 + "contents TEXT,"
                                 + "overView TEXT,"
                                 + "complete INTEGER);";

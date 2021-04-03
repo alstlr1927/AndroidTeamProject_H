@@ -10,8 +10,6 @@ public class ThemeData implements Serializable {
     private String tel;
     private String overView;
     private String picture;
-    private String content_pola;
-    private String content_title;
     private String contents;
     private int complete;
     private double mapX;
@@ -31,8 +29,6 @@ public class ThemeData implements Serializable {
 
         this.title = title;
         this.picture = picture;
-        this.content_pola = content_pola;
-        this.content_title = content_title;
         this.contents = contents;
         this.complete = complete;
     }
@@ -64,29 +60,6 @@ public class ThemeData implements Serializable {
     public void setPicture(String picture) {
         this.picture = picture;
     }
-
-    public String getContent_pola() {
-        return content_pola;
-    }
-
-    public void setContent_pola(String content_pola) {
-
-        this.content_pola = content_pola;
-
-    }
-
-    public String getContent_title() {
-
-        return content_title;
-
-    }
-
-    public void setContent_title(String content_title) {
-
-        this.content_title = content_title;
-
-    }
-
 
     public String getContents() {
 

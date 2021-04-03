@@ -2,27 +2,17 @@ package com.cookandroid.androidteamproject_h;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,28 +21,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class Fragment_Map extends Fragment {
+public class Fragment_event extends Fragment {
 
     static final String TAG = "MAP";
 
@@ -77,7 +56,7 @@ public class Fragment_Map extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
+        View view = inflater.inflate(R.layout.fragment_event, container, false);
 
         findViewByIdFunc(view);
 
@@ -103,7 +82,7 @@ public class Fragment_Map extends Fragment {
 
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new MapAdapter(R.layout.item_map, list);
+        adapter = new MapAdapter(R.layout.item_event, list);
         recyclerView.setAdapter(adapter);
     }
 
@@ -166,7 +145,7 @@ public class Fragment_Map extends Fragment {
         information.setOnClickListener((View v) -> {
             AlertDialog.Builder dlg = new AlertDialog.Builder(getContext());
             dlg.setTitle("설 명");
-            dlg.setMessage("목적지와 500m 이내에서 카메라 모드 버튼을 눌러야 사진 촬영이 가능합니다!!");
+            dlg.setMessage("목적지를 선택한 후 목적지와 500m 이내에서 카메라 모드 버튼을 눌러야 사진 촬영이 가능합니다!!");
             dlg.setPositiveButton("확인", null);
             dlg.show();
         });

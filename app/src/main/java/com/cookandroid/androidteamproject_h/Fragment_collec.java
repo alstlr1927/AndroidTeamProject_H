@@ -81,7 +81,7 @@ public class Fragment_collec extends Fragment implements View.OnClickListener {
         Cursor cursor = MainActivity.db.rawQuery("SELECT * FROM checker_"+LoginActivity.userID+" WHERE complete=1;", null);
         while(cursor.moveToNext()) {
             collectList.add(new ThemeData(cursor.getString(1), cursor.getString(6),
-                    cursor.getString(9), cursor.getString(10), cursor.getInt(11)));
+                    cursor.getString(7), cursor.getString(8), cursor.getInt(9)));
         }
         cursor.moveToFirst();
 
