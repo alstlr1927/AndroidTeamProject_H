@@ -128,6 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                                 + "content_pola TEXT,"
                                 + "content_title TEXT,"
                                 + "contents TEXT,"
+                                + "overView TEXT,"
                                 + "complete INTEGER);";
                         MainActivity.db.execSQL(createCheckerTBL);
                     } catch (SQLiteConstraintException e) {

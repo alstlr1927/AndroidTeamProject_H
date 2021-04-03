@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">AndroidTeamProject_H</string>
     <string name="kakao_app_key">7f7bff9c466d16bcd31c9ca0e83be20b</string>
+
+    <string name="temperature_unit">°C</string>
+    <string name="temperature_max">최고온도</string>
+    <string name="temperature_min">최저온도</string>
+    <string name="pressure">기압</string>
+    <string name="pressure_unit">hPa</string>
+    <string name="humidity">습도</string>
+    <string name="sunrise">일출</string>
+    <string name="sunset">일몰</string>
+    <string name="settings">설정</string>
+    <string name="bodily_temprature">체감온도</string>
+    <string name="precipitation">강수량</string>
+    <string name="precipitation_unit">mm</string>
+
 </resources>
