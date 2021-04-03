@@ -292,7 +292,7 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback, View.O
 
                     SEOUL1 = new LatLng(lat,org);
                     CircleOptions circle1KM = new CircleOptions().center(SEOUL1) //원점
-                            .radius(1000)      //반지름 단위 : m
+                            .radius(100)      //반지름 단위 : m
                             .strokeWidth(0f)  //선너비 0f : 선없음
                             .fillColor(Color.parseColor("#880000ff")); //배경색
 
