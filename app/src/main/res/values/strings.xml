@@ -11,5 +11,8 @@
     <string name="sunrise">일출</string>
     <string name="sunset">일몰</string>
     <string name="settings">설정</string>
+    <string name="bodily_temprature">체감온도</string>
+    <string name="precipitation">강수량</string>
+    <string name="precipitation_unit">mm</string>
 
 </resources>

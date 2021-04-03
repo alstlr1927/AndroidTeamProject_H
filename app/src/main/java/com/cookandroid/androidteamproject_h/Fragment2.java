@@ -101,8 +101,10 @@ public class Fragment2 extends Fragment {
 
         displayWeather(rootView.getContext());
 
+
         return rootView;
     }
+
 
     public void displayWeather(Context context) {
         openProgressDialog();
@@ -315,7 +317,6 @@ public class Fragment2 extends Fragment {
         current_temp_max =(TextView)rootView.findViewById(R.id.temp_max);
         current_temp_min =(TextView)rootView.findViewById(R.id.temp_min);
         weathericon = (ImageView)rootView.findViewById(R.id.image_weather);
-
 
     }
 
