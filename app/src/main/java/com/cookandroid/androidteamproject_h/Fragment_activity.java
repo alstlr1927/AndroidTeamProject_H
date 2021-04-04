@@ -104,7 +104,7 @@ public class Fragment_activity extends Fragment {
 
         String url ="http://api.visitkorea.or.kr/openapi/service/" +
                 "rest/KorService/areaBasedList?ServiceKey=" +
-                KEY +"&areaCode=1&contentTypeId=28&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp=" +
+                KEY +"&areaCode="+ LoginActivity.areaCode +"&contentTypeId=28&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp=" +
                 appName + "&_type=json";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

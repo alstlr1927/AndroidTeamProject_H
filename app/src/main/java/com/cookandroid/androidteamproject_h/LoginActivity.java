@@ -11,31 +11,94 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.kakao.auth.ApiErrorCode;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
+import com.kakao.usermgmt.LoginButton;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeV2ResponseCallback;
 import com.kakao.usermgmt.response.MeV2Response;
 import com.kakao.util.exception.KakaoException;
 
 import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
 
     private SessionCallback sessionCallback;
+    private LoginButton btnKakao;
+    private Spinner spinner;
 
     public static Long userID = null;
+    public static int areaCode = 1;
+
+    private ArrayList<String> items = new ArrayList<>(Arrays.asList("서울", "인천", "대전", "대구", "광주", "부산",
+            "울산", "세종", "경기도", "강원도", "제주도"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        spinner = findViewById(R.id.spinner);
+
 //        getAppKeyHash();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, items);
+
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0 :
+                        areaCode = 1;
+                        break;
+                    case 1 :
+                        areaCode = 2;
+                        break;
+                    case 2 :
+                        areaCode = 3;
+                        break;
+                    case 3 :
+                        areaCode = 4;
+                        break;
+                    case 4 :
+                        areaCode = 5;
+                        break;
+                    case 5 :
+                        areaCode = 6;
+                        break;
+                    case 6 :
+                        areaCode = 7;
+                        break;
+                    case 7 :
+                        areaCode = 8;
+                        break;
+                    case 8 :
+                        areaCode = 31;
+                        break;
+                    case 9 :
+                        areaCode = 32;
+                        break;
+                    case 10 :
+                        areaCode = 39;
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         sessionCallback = new SessionCallback();
         Session.getCurrentSession().addCallback(sessionCallback);

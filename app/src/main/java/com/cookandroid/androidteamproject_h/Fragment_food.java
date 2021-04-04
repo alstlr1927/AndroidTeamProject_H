@@ -102,7 +102,7 @@ public class Fragment_food extends Fragment {
 
         String url = "http://api.visitkorea.or.kr/openapi/service/" +
                 "rest/KorService/areaBasedList?ServiceKey=" +
-                KEY + "&areaCode=1&contentTypeId=39&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp=" +
+                KEY + "&areaCode="+ LoginActivity.areaCode +"&contentTypeId=39&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp=" +
                 appName + "&_type=json";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest

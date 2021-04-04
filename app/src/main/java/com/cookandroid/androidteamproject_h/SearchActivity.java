@@ -83,7 +83,7 @@ public class SearchActivity extends AppCompatActivity {
 
         String url = "http://api.visitkorea.or.kr/openapi/service/"
                 + "rest/KorService/searchKeyword?ServiceKey=" + KEY
-                + "&MobileApp="+ appName +"&MobileOS=AND&pageNo=1&numOfRows=20&listYN=Y&arrange=P&areaCode=1&keyword="
+                + "&MobileApp="+ appName +"&MobileOS=AND&pageNo=1&numOfRows=20&listYN=Y&arrange=P&areaCode="+ LoginActivity.areaCode +"&keyword="
                 + keyword + "&_type=json";
 
         JsonObjectRequest jsonObjectRequest =

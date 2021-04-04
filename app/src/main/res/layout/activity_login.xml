@@ -4,15 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity"
+    android:background="#232323"
+    android:gravity="center"
     android:orientation="vertical"
-    android:background="#2E2E2E"
-    android:gravity="center">
+    tools:context=".LoginActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="303dp">
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
+
 
     <com.kakao.usermgmt.LoginButton
+        android:id="@+id/btnKakao"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="20dp"/>
+        android:layout_margin="20dp" />
 
 </RelativeLayout>

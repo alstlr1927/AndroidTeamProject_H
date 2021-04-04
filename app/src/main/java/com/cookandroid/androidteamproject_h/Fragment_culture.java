@@ -136,7 +136,7 @@ public class Fragment_culture extends Fragment {
         queue = Volley.newRequestQueue(getActivity());
         String url ="http://api.visitkorea.or.kr/openapi/service/" +
                 "rest/KorService/areaBasedList?ServiceKey=" +
-                KEY +"&areaCode=1&contentTypeId=14&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp=" +
+                KEY +"&areaCode="+ LoginActivity.areaCode +"&contentTypeId=14&listYN=Y&arrange=P&numOfRows=20&pageNo=1&MobileOS=AND&MobileApp=" +
                 appName + "&_type=json";
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
