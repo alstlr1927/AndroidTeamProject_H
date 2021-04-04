@@ -19,7 +19,7 @@ public class App extends Application {
     private static class KakaoSDKAdapter extends KakaoAdapter {
         /**
          *  Session Config에 대해서는 default 값들이 존재한다.
-         *  필요한 상황에서만 override 해서 사용하면 됨.
+         *  필요한 상황에서만 override 해서 사용하면 됨
          * @return Session 설정값.
          */
         // 카카오 로그인 세션을 불러올 때의 설정값을 설정하는 부분.
