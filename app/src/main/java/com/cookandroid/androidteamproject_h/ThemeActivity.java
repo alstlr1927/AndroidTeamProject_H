@@ -9,11 +9,15 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -22,12 +26,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ThemeActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.BaseOnTabSelectedListener, ViewPager.OnPageChangeListener {
 
@@ -47,10 +57,14 @@ public class ThemeActivity extends AppCompatActivity implements View.OnClickList
 
     private FloatingActionButton fb1, fb2, fb3;
     private Animation fab_open, fab_close;
+
     private boolean fbOpen = false;
+    private String strName, strProfile;
 
     private EditText edtSearch;
     private ImageButton btnSearch;
+
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +84,45 @@ public class ThemeActivity extends AppCompatActivity implements View.OnClickList
         });
 
         viewPager.addOnPageChangeListener(this);
+
+        strName = getIntent().getStringExtra("name");
+        strProfile = getIntent().getStringExtra("profile");
+
+        CharSequence txt = "txt";
+        int time = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(getApplicationContext(), txt, time);
+        LayoutInflater inflater = getLayoutInflater();
+
+        View view = inflater.inflate(R.layout.custom_toastview, (ViewGroup)findViewById(R.id.containers));
+
+        TextView txtName = view.findViewById(R.id.txtName);
+        CircleImageView circleImageView = view.findViewById(R.id.txtProfileImage);
+
+        txtName.setText(strName);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(strProfile);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setDoInput(true);
+                    connection.connect();
+                    InputStream is = connection.getInputStream();
+                    bitmap = BitmapFactory.decodeStream(is);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+            circleImageView.setImageBitmap(bitmap);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        toast.setView(view);
+        toast.show();
     }
 
     private void findViewByIdFunc() {
