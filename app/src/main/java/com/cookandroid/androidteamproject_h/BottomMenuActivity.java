@@ -31,10 +31,10 @@ public class BottomMenuActivity extends AppCompatActivity {
                     case R.id.gps_frag :
                         setChangeFragment(0);
                         break;
-                    case R.id.frag2 :
+                    case R.id.weather_frag :
                         setChangeFragment(1);
                         break;
-                    case R.id.map_frag :
+                    case R.id.event_frag :
                         setChangeFragment(2);
                         break;
                     case R.id.collect_frag :

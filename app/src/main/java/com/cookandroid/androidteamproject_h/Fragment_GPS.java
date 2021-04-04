@@ -68,7 +68,7 @@ public class Fragment_GPS extends Fragment implements OnMapReadyCallback, View.O
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.gps_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_gps, container, false);
 
         checkList.removeAll(checkList);
 

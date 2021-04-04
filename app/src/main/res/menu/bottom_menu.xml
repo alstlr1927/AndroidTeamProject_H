@@ -1,30 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <item
         android:id="@+id/gps_frag"
         android:enabled="true"
-        android:title="GPS"/>
+        android:icon="@drawable/map"
+        android:title="지도"
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/frag2"
+        android:id="@+id/weather_frag"
         android:enabled="true"
-        android:title="frag2"/>
+        android:icon="@drawable/ic_baseline_wb_sunny_24"
+        android:title="날씨"
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/map_frag"
+        android:id="@+id/event_frag"
         android:enabled="true"
-        android:title="Map"/>
+        android:icon="@drawable/ic_baseline_priority_high_24"
+        android:title="미션"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/collect_frag"
         android:enabled="true"
-        android:title="Collections"/>
+        android:icon="@drawable/collection"
+        android:title="컬렉션"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/appInfo_frag"
         android:enabled="true"
-        android:title="AppInfo"/>
+        android:icon="@drawable/appinfo"
+        android:title="정보"
+        app:showAsAction="ifRoom" />
 
 </menu>

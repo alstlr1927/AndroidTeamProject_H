@@ -194,9 +194,9 @@ public class ThemeActivity extends AppCompatActivity implements View.OnClickList
                     Cursor cursor1 = MainActivity.db.rawQuery("SELECT * FROM checker_" + LoginActivity.userID + ";", null);
                     cursor1.moveToFirst();
 
-                    if(checkList.size() + cursor.getCount() > 8) {
+                    if(checkList.size() + cursor1.getCount() > 9) {
                         Toast.makeText(getApplicationContext(),
-                                "8개 이상을 체크리스트에 담을 수는 없습니다.(현재 체크리스트 : "+ cursor1.getCount() +"곳)", Toast.LENGTH_SHORT).show();
+                                "9개를 초과해서 체크리스트에 담을 수는 없습니다.(현재 체크리스트 : "+ cursor1.getCount() +"곳)", Toast.LENGTH_SHORT).show();
                     } else {
                         for(ThemeData data:checkList) {
 
