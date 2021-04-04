@@ -120,10 +120,10 @@ public class Fragment_event extends Fragment {
                 goalLat = list.get(pos).getMapY();
                 goalLng = list.get(pos).getMapX();
 
-                distance = DistanceByDegree(startLat, startLng, startLat, startLng);
+                distance = DistanceByDegree(startLat, startLng, goalLat, goalLng);
 
                 alert.setOnClickListener((View view2) -> {
-                    if(distance > 500.0) {
+                    if(distance > 100.0) {
                         if(distance >= 1000.0) {
                             Log.d(TAG, Math.round(distance / 10.0) /100.0 +"km");
                             Toast.makeText(getActivity(), "너무 떨어져 있습니다. (" + Math.round(distance / 10.0) /100.0 + "km)", Toast.LENGTH_SHORT).show();
