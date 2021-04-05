@@ -189,7 +189,6 @@ public class LoginActivity extends AppCompatActivity {
                                 + "firstImage TEXT,"
                                 + "picture TEXT,"
                                 + "contents TEXT,"
-                                + "overView TEXT,"
                                 + "complete INTEGER);";
                         MainActivity.db.execSQL(createCheckerTBL);
                     } catch (SQLiteConstraintException e) {

@@ -31,7 +31,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class Fragment_event extends Fragment {
+public class    Fragment_event extends Fragment {
 
     static final String TAG = "MAP";
 
@@ -120,7 +120,7 @@ public class Fragment_event extends Fragment {
                 goalLat = list.get(pos).getMapY();
                 goalLng = list.get(pos).getMapX();
 
-                distance = DistanceByDegree(startLat, startLng, goalLat, goalLng);
+                distance = DistanceByDegree(startLat, startLng, startLat, startLng);
 
                 alert.setOnClickListener((View view2) -> {
                     if(distance > 100.0) {
@@ -135,7 +135,6 @@ public class Fragment_event extends Fragment {
                         Intent intent = new Intent(view2.getContext(), CameraActivity.class);
                         intent.putExtra("title", list.get(pos).getTitle());
                         view2.getContext().startActivity(intent);
-                        Toast.makeText(getActivity(), "카메라 실행" + distance, Toast.LENGTH_SHORT).show();
                     }
                 });
 

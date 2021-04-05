@@ -33,11 +33,10 @@ public class ThemeData implements Serializable {
         this.complete = complete;
     }
 
-    public ThemeData(String title, String picture, String contents, String overView, int complete) {
+    public ThemeData(String title, String picture, String contents, int complete) {
         this.title = title;
         this.picture = picture;
         this.contents = contents;
-        this.overView = overView;
         this.complete = complete;
     }
 

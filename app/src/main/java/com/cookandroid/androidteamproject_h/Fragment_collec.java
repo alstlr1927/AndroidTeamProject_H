@@ -58,7 +58,7 @@ public class Fragment_collec extends Fragment implements View.OnClickListener {
         Cursor cursor = MainActivity.db.rawQuery("SELECT * FROM checker_"+LoginActivity.userID+" WHERE complete=1;", null);
         while(cursor.moveToNext()) {
             collectList.add(new ThemeData(cursor.getString(1), cursor.getString(6),
-                    cursor.getString(7), cursor.getString(8), cursor.getInt(9)));
+                    cursor.getString(7), cursor.getInt(8)));
         }
         cursor.moveToFirst();
 
@@ -149,7 +149,6 @@ public class Fragment_collec extends Fragment implements View.OnClickListener {
                                 + "firstImage TEXT,"
                                 + "picture TEXT,"
                                 + "contents TEXT,"
-                                + "overView TEXT,"
                                 + "complete INTEGER);");
                         Intent intent = new Intent(view.getContext(), ThemeActivity.class);
                         startActivity(intent);
